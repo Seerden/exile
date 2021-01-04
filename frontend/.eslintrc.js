@@ -3,12 +3,12 @@ module.exports = {
     "rules": {
     },
     "overrides": [
-      {
-        "files": ["**/*.js?(x)"],
-        "rules": {
-          "react-hooks/exhaustive-deps": "off",
-          "no-unused-vars": "off"
+        {
+            "files": ["**/*.js?(x)"],
+            "rules": {
+                "react-hooks/exhaustive-deps": "off",
+                "no-unused-vars": "off"
+            }
         }
-      }
     ]
-  }
+}

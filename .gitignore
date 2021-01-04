@@ -6,3 +6,4 @@ backend/package-lock.json
 
 *.env
 *.rest
+node_modules

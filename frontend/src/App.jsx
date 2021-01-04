@@ -4,7 +4,7 @@ const App = (props) => {
     
     return (
         <div className="App">
-            Home.        
+            Hello
         </div>
     )
 }
