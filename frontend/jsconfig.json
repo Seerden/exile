@@ -1,0 +1,14 @@
+{
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    },
+    "compilerOptions": {
+        "baseUrl": "src",
+        "checkJs": true
+    },
+    "include": [
+        "src"
+    ]
+}
