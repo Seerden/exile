@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import 'dotenv/config.js';
 
+import axios from 'axios';
+
 /**
  * Express router for /db routes, used as API endpoints for frontend interaction with the database.
  */
