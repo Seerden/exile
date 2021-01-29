@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { readFileSync } from 'fs';
+import path from 'path';
 
 const tabBaseUrl = 'https://www.pathofexile.com/character-window/get-stash-items'
 
@@ -9,7 +11,7 @@ export function getTabOverviewFromPoeApi(options) {
 
     return axios
         .get(`${tabBaseUrl}?accountName=${accountName}&realm=pc&league=${league}&tabs=1&tabIndex=-1`, {
-            headers: { cookie: `POESESSID=${POESESSID}` } 
+            headers: { cookie: `POESESSID=${POESESSID}` }
         })
         .then(res => res.data)
         .catch(console.log)
@@ -34,10 +36,10 @@ export function getAndParseTabOverview(options) {
 // #---- SINGLE TAB HELPERS
 export function getTabFromPoeApi(options) {
     const {
-        accountName, 
+        accountName,
         POESESSID,
         league,
-        tabIndex, 
+        tabIndex,
     } = options;
 
     return axios
@@ -51,7 +53,40 @@ export function getTabFromPoeApi(options) {
         .then(res => res.data);
 }
 
-export function getItemsFromTab(options) {
+export function getAndExtractItemsFromTab(options) {
     return getTabFromPoeApi(options)
         .then(data => data.items)
+}
+
+export function getTabAndExtractPropsFromItems(options) {
+    return getAndExtractItemsFromTab(options)
+        .then(items => {
+            items = items.map(({ typeLine, stackSize, icon }) => ({ typeLine, stackSize, icon }))
+            items = appendValueToItems(items)
+            return items
+        })
+}
+
+function getLatestNinjaValuesFromJson(){
+    const loc = path.resolve('./helpers/api/ninjaChaosValues.json');
+    const ninjaChaosValues = JSON.parse(readFileSync(loc))
+    const latestChaosValues = ninjaChaosValues[ninjaChaosValues.length-1]
+
+    return latestChaosValues
+}
+
+function appendValueToItems(items){ 
+    const latestChaosValues = getLatestNinjaValuesFromJson().chaosValues
+
+    return items.map(item => {
+        let entry = latestChaosValues.filter(entry => entry.name === item.typeLine);
+        let chaosValue = entry.length > 0 ? entry[0].chaosValue : 0;
+        const totalChaosValue = item.stackSize ? chaosValue*item.stackSize : chaosValue;
+
+        return {
+            ...item, 
+            chaosValue, 
+            totalChaosValue
+        }
+    })
 }

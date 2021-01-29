@@ -12,7 +12,7 @@ const leagueNameEnum = {
 }
 
 const AccountInfo = (props) => {
-    const [accountInfo, setAccountInfo] = useState({
+    const [accountInfo, setAccountInfo] = useState(JSON.parse(localStorage.getItem("accountInfo")) || {
         accountName: "",
         league: "ritual",
         POESESSID: "",
@@ -29,6 +29,8 @@ const AccountInfo = (props) => {
     useEffect(() => {
         if (tabOverviewResponse) {
             setStashOverviewAtom(tabOverviewResponse)
+
+            localStorage.setItem("accountInfo", JSON.stringify(accountInfo))
         }
     }, [tabOverviewResponse])
 
