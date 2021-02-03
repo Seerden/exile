@@ -1,0 +1,5 @@
+@use '../../../shared';
+
+.TrackedTabs {
+    @extend %shared-section   
+}

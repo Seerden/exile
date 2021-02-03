@@ -1,12 +1,13 @@
-import react, { useEffect, useState } from 'react';
+import react, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 
 export function useRequest({ url }) {
     const [error, setError] = useState(null);
     const [response, setResponse] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [options, setOptions] = useState(null);
-    const source = axios.CancelToken.source();
+    const source = new axios.CancelToken.source();
 
     useEffect(() => {  // effect to track mount state, aids in canceling requests on unmount
         setMounted(true);
@@ -19,26 +20,23 @@ export function useRequest({ url }) {
 
     useEffect(() => {
         if (options && mounted) {
-            console.log(options);
+            setLoading(true);
+
             axios({
                 method: options.method,
                 url,
                 data: options.data
             })
                 .then(res => {
+                    setLoading(false)
                     setResponse(res.data)
                 })
                 .catch(err => {
+                    setLoading(false)
                     setError(err)
                 })
         }
     }, [options])
 
-    useEffect(() => {
-        response && console.log(response);
-        error && console.log(error);
-
-    }, [response, error])
-
-    return [setOptions, response, error]
+    return [setOptions, response, error, loading]
 }

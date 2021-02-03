@@ -11,4 +11,16 @@
 
     box-shadow: 0 0 0.1rem #ccc;
 
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    transition: all 100ms linear;
+    background-color: white;
+
+    &:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+
 }

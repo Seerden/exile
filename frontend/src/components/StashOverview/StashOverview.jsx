@@ -1,28 +1,47 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useRecoilValue } from 'recoil';
-import { stashOverviewState } from "state/stateAtoms";
-import './style/StashOverview.scss';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import OverviewItem from './OverviewItem';
+import './style/StashOverview.scss';
+import { useRecoilState } from 'recoil';
+import { trackedTabsState } from 'state/stateAtoms'
 
 const StashOverview = (props) => {
-    const stashOverviewAtomState = useRecoilValue(stashOverviewState);
-    const overviewItemElements = useMemo(() => {
-        if (stashOverviewAtomState) {
-            return stashOverviewAtomState.map((tab, i) => {
-                return <OverviewItem key={`overviewItem-${i}`} props={tab}/>
+    const { date, tabOverview } = JSON.parse(localStorage.getItem("tabOverview"));
+    const [trackedTabsAtom, setTrackedTabsAtom] = useRecoilState(trackedTabsState);
+
+    const trackedTabsElement = trackedTabsAtom.map(tab => <span className="StashOverview__tracked--tab">{tab.n}</span>)
+
+    function makeOverviewItemElements() {
+        if (tabOverview.length > 0) {
+            return tabOverview.map((tab, i) => {
+                return <OverviewItem key={`overviewItem-${Date.now()}-${i}`} tabProps={{ ...tab, index: i }} />
             })
         }
-    }, [stashOverviewAtomState])
+    }
+
+    const overviewItemElements = makeOverviewItemElements();
+
+    const handleTabSelectClick = useCallback(() => {
+        localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
+    }, [trackedTabsAtom])
 
     return (
         <div className="StashOverview">
-            TabOverview.jsx
-            <header>
-                <h3>
-                    Tab overview
-                </h3>
+            <header className="StashOverview__header">
+                Pick tabs to track (max. 10) 
+                { trackedTabsAtom.length > 0 && 
+                    <input 
+                        onClick={handleTabSelectClick}
+                        className="StashOverview__button" 
+                        type="button" 
+                        value="Confirm"
+                    /> 
+                }
             </header>
-            {overviewItemElements && overviewItemElements}
+
+
+            <div className="StashOverview__tabs">
+                {overviewItemElements?.length > 0 && overviewItemElements}
+            </div>
         </div>
     )
 }

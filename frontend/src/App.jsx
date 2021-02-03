@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AccountInfo from "components/AccountInfo/AccountInfo";
 import StashOverview from "components/StashOverview/StashOverview";
 import Home from "components/Home/Home"
+import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 
 const App = (props) => {
     
@@ -14,14 +15,14 @@ const App = (props) => {
                 
                 <Router>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-
-                        <Route path="/overview" element={ 
+                        <Route path="/" element={
                             <>
-                                <AccountInfo /> 
+                                <AccountInfo />
                                 <StashOverview />
+                                <TrackedTabs />
                             </>
-                        }/>
+                        } 
+                        />
                     </Routes>
                 </Router>
             </div>

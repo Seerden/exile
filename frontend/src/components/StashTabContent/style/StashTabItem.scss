@@ -1,0 +1,66 @@
+.StashTabItem {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    margin: 0.2rem;
+    border: 2px solid #ccc;
+    box-shadow: 0.3rem 0.3rem 0 -0.1rem #eee;
+    border-radius: 2px;
+    width: max-content;
+    font-size: 0.9rem;
+
+
+    img {
+        background-color: #eee;
+        // box-shadow: 0 0 0.2rem #222;
+        border-radius: 20%;
+        padding: 0.18rem;
+        background-color: #eee;
+    }
+
+    span {
+        display: inline-flex;
+        
+        &:nth-of-type(1) {
+            width: 3rem;
+        }
+
+        &:nth-of-type(2) {
+            width: 5rem;
+            justify-content: flex-end;
+        }
+    }
+
+    &__icon {
+        position: relative;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        &--image {
+            max-width: 60px;
+            max-height: 60px;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            object-fit: cover;
+            // position: absolute;
+            
+        }
+
+        &--count {
+            position: absolute;
+            display: inline-block;
+            top: -7px;
+            left: -7px;
+            color: black;
+            font-size: 0.8rem;
+            // -webkit-text-stroke: 0.5px black;
+            // text-shadow: 0 0 0.1rem black;
+            // width: min-content;
+            // background-color: #ccc;
+        }
+    }
+}

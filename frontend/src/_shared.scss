@@ -1,0 +1,14 @@
+%shared-section {
+    @media screen and (min-width: 768px) {
+        max-width: 50rem;
+        
+        border: 2px solid #eee;
+        border-radius: 4px;
+        box-shadow: 0 0 0.3rem #ccc;
+
+        margin: 0 auto;
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+
+}

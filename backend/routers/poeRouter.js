@@ -18,18 +18,32 @@ poeRouter.get('/', (req, res) => {
     
 })
 
-poeRouter.get('/tab', (req, res) => {
-    const { accountName, POESESSID, league, indices } = req.body.options;
-    
-    const options = {
-        tabIndex: indices[0],
-        accountName,
-        POESESSID,
-        league
-    }
+poeRouter.post('/tab', (req, res) => {
+    console.log(req.body);
+    // const { accountName, POESESSID, league, tabIndex } = req.body;
+    const options = req.body;
 
     getTabAndExtractPropsFromItems(options)
         .then(parsedItems => res.send(parsedItems))
+
+})
+
+poeRouter.post('/tabs', async (req, res) => {
+    const { accountName, POESESSID, league, indices } = req.body;
+
+    const tabContents = [];
+
+    for (let tabIndex of indices) {
+        const options = { accountName, POESESSID, league, tabIndex }
+        try {
+            let tab = await getTabAndExtractPropsFromItems(options)
+            tabContents.push(tab)
+        } catch (err) {
+            res.status(500).send('Error fetching tab content')
+        }
+    }
+
+    res.send(tabContents.flat())
 
 })
 
