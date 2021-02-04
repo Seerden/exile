@@ -1,16 +1,18 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useMemo } from "react";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accountInfoState } from 'state/stateAtoms'
 import { useRequest } from 'helpers/hooks/requestHooks'
+import { trackedTabsState } from 'state/stateAtoms'
 import StashTabContent from "components/StashTabContent/StashTabContent";
 import './style/TrackedTabs.scss'
 
 const TrackedTabs = (props) => {
     const accountInfoAtom = useRecoilValue(accountInfoState);
+    const trackedTabsAtom = useRecoilValue(trackedTabsState)
     const { accountName, league, POESESSID } = accountInfoAtom
 
     const [makeRequest, response, error, loading] = useRequest({ url: '/poe/tabs' })
-    const trackedTabIndices = JSON.parse(localStorage.getItem("trackedTabs")).map(tab => tab.index);
+    const trackedTabIndices = useMemo(() => trackedTabsAtom.map(tab => tab.index), [trackedTabsAtom]);
 
     const requestTrackedTabContents = useCallback(() => {
         makeRequest({

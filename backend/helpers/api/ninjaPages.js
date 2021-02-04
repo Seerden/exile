@@ -1,6 +1,7 @@
 const itemTypes = [
     "DeliriumOrb", 
     "Watchstone", 
+    "Invitation",
     "Oil", 
     "Incubator", 
     "Scarab", 
