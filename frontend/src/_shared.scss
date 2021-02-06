@@ -1,6 +1,6 @@
 %shared-section {
     @media screen and (min-width: 768px) {
-        max-width: 50rem;
+        max-width: 90%;
         
         border: 2px solid #eee;
         border-radius: 4px;
@@ -11,4 +11,38 @@
         padding: 1rem;
     }
 
+    @media screen and (min-width: 1080px) {
+        max-width: 70%;
+    }
+
+}
+
+%shared-button {
+    $button-color: #ccc;
+    $button-color-secondary: #444;
+
+    margin-left: 0.2rem;
+    outline: none;
+    border: none;
+    padding: 0.4rem;
+    border: 1px solid $button-color;
+    background-color: #fdfdfd;
+    color: $button-color-secondary;
+    font-weight: 400;
+    font-size: 0.8rem;
+
+    transition: all 50ms ease-in;
+
+    &:hover {
+        box-shadow: 0 0 0.3rem 0 $button-color-secondary;
+        box-shadow: 0 0.4rem 0 -0.3rem $button-color-secondary;
+        transform: translateY(-1px);
+    }
+}
+
+%shared-fetching {
+    font-size: 0.8rem;
+    border-radius: 3px;
+    background-color: #eee;
+    padding: 0.4rem 1rem;
 }

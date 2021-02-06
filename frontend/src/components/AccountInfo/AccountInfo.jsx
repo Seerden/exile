@@ -55,7 +55,7 @@ const AccountInfo = (props) => {
         <>
             <div className="AccountInfo">
                 <form className="AccountInfo__form">
-                    <header className="AccountInfo--field">
+                    <header className="AccountInfo__header AccountInfo__form--field">
                         <h3>
                             Account Information
                         </h3>

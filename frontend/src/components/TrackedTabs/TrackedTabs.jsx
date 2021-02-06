@@ -31,14 +31,21 @@ const TrackedTabs = (props) => {
 
     return (
         <div className="TrackedTabs">
-            <header>
-                TrackedTabs.jsx
+            <header className="TrackedTabs__header">
+                Tracked tabs
+                { loading &&
+                    <div className="TrackedTabs__fetching">Fetching tab contents...</div>
+                
+                }
+                { trackedTabsAtom.length > 0 && 
+                    <input 
+                        type="button" 
+                        className="TrackedTabs__button"
+                        value="Request tabs"
+                        onClick={requestTrackedTabContents}
+                    />
+                }
             </header>
-            <input 
-                type="button" 
-                value="Request tabs"
-                onClick={requestTrackedTabContents}
-            />
 
             { response && 
                 <StashTabContent tabContent={response} />

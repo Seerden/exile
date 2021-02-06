@@ -10,6 +10,10 @@
     
     @extend %shared-section;
     
+    &__header {
+        text-align: center;
+    }
+
     &__form {
         &--field {
             display: block;
@@ -28,9 +32,12 @@
 
         &--input {
             width: 10rem;
+            padding: 0.3rem;
+            border: 1px solid #ccc
         }
 
         &--submit {
+            @extend %shared-button;
             display: block;
             margin: 0 auto;
         }

@@ -11,8 +11,10 @@ export const accountInfoState = atom({
 
 export const trackedTabsState = atom({
     key: "trackedTabsState",
-    default: [],
+    default: JSON.parse(localStorage.getItem("trackedTabs")) || [],
     effects_UNSTABLE: [
-        ({onSet}) => {onSet(state => console.log(state))}
+        ({ onSet }) => {
+            onSet(state => console.log(state))
+        }
     ]
 })
