@@ -5,6 +5,7 @@ import { useRequest } from 'helpers/hooks/requestHooks'
 import { trackedTabsState } from 'state/stateAtoms'
 import StashTabContent from "components/StashTabContent/StashTabContent";
 import './style/TrackedTabs.scss'
+import { appendToTabContent } from "helpers/storage/tabContent";
 
 const TrackedTabs = (props) => {
     const accountInfoAtom = useRecoilValue(accountInfoState);
@@ -21,10 +22,10 @@ const TrackedTabs = (props) => {
         })
     }, [trackedTabIndices])
 
-
     useEffect(() => {
-        if(response) {
+        if  (response) {
             console.log(response);
+            appendToTabContent(response);
         }
     }, [response])
 
@@ -32,7 +33,9 @@ const TrackedTabs = (props) => {
     return (
         <div className="TrackedTabs">
             <header className="TrackedTabs__header">
-                Tracked tabs
+                <h3>
+                    Tracked tabs
+                </h3>
                 { loading &&
                     <div className="TrackedTabs__fetching">Fetching tab contents...</div>
                 

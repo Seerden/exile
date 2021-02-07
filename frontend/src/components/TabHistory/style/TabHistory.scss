@@ -1,0 +1,16 @@
+@use '../../../shared';
+
+.TabHistory {
+    @extend %shared-section;
+
+    &__header {
+        @extend %shared-heading;
+    }
+
+    &__entry {
+        &--count {
+            display: inline-block;
+            width: 3rem;
+        }
+    }
+}

@@ -27,7 +27,9 @@ const StashOverview = (props) => {
     return (
         <div className="StashOverview">
             <header className="StashOverview__header">
-                Pick tabs to track (max. 10) 
+                <h3>
+                    Pick tabs to track (max. 10)
+                </h3>
                 { trackedTabsAtom.length > 0 && 
                     <input 
                         onClick={handleTabSelectClick}

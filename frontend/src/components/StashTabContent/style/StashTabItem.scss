@@ -1,14 +1,12 @@
 .StashTabItem {
     display: inline-flex;
     align-items: center;
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 0.4rem;
     margin: 0.2rem;
-    border: 2px solid #ccc;
-    box-shadow: 0.3rem 0.3rem 0 -0.1rem #eee;
-    border-radius: 2px;
-    width: max-content;
-    font-size: 0.9rem;
-
+    
+    // border: 2px solid #ccc;
+    // box-shadow: 0.3rem 0.3rem 0 -0.1rem #eee;
+    // border-radius: 2px;
 
     img {
         background-color: #eee;
@@ -53,8 +51,8 @@
         &--count {
             position: absolute;
             display: inline-block;
-            top: -7px;
-            left: -7px;
+            top: -12px;
+            left: -12px;
             color: black;
             font-size: 0.8rem;
             // -webkit-text-stroke: 0.5px black;

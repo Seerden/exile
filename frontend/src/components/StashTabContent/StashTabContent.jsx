@@ -16,18 +16,19 @@ const StashTabContent = ({ tabContent }) => {
     return (
         <div className="StashTabContent">
             <section>
-                <header>
-                    <h3>Total tab value: {totalTabValue}<em>c</em></h3>
+                <header className="StashTabContent__header">
+                    <span>Total tab value: {totalTabValue}<em>c</em></span>
+                    <input 
+                        type="button" 
+                        className="StashTabContent__toggle"
+                        value={showItems ? 'Hide items' : 'Show items'}
+                        onClick={() => setShowItems(cur => !cur)}
+                    />
                 </header>
             </section>
 
-            <input 
-                type="button" 
-                value={showItems ? 'Hide items' : 'Show items'}
-                onClick={() => setShowItems(cur => !cur)}
-            />
                 {showItems &&
-                    <ul>
+                    <ul className="StashTabContent__items">
                         {contentElement}
                     </ul>
                 }

@@ -1,5 +1,20 @@
-.StashTabContent {
-    background-color: #f8f8f8;
+@use '../../../shared';
 
-    padding: 2rem;
+.StashTabContent {
+    // padding: 1rem;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__toggle {
+        @extend %shared-button
+    }
+
+    &__items {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
