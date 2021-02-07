@@ -71,7 +71,6 @@ function getLatestPings(timeInterval) {
     if (length > 0) {
         const latestPingDate = tabHistory[length-1].date;
         const pingsInInterval = tabHistory.filter(historyEntry => new Date(latestPingDate) - new Date(historyEntry.date) < timeInterval )
-        console.log(pingsInInterval);
         return pingsInInterval
     }
 }
@@ -84,7 +83,7 @@ const TabHistory = (props) => {
     const itemDeltaElement = Object.entries(itemDelta)
         .filter(([k, v]) => +v !== 0)
         .map(([k, v]) => <li 
-            className="TabHistory__entry"
+            className="TabHistory__diff--list--item"
             style={{color: v > 0 ? 'seagreen' : 'orangered'}}
         >
             <span className="TabHistory__entry--count">
@@ -105,11 +104,11 @@ const TabHistory = (props) => {
             <div>
                 Currency change over the past { parsedInterval } hours: { currencyDelta.toFixed(1) }c.
             </div>
-            <div>
+            <div className="TabHistory__diff">
                 <header>
                     Item change
                 </header>
-                <ul>
+                <ul className="TabHistory__diff--list">
                     {itemDeltaElement}
                 </ul>
             </div>

@@ -9,11 +9,10 @@
     // border-radius: 2px;
 
     img {
-        background-color: #eee;
+        background-color: #f0f0f0;
         // box-shadow: 0 0 0.2rem #222;
         border-radius: 20%;
         padding: 0.18rem;
-        background-color: #eee;
     }
 
     span {
@@ -51,14 +50,15 @@
         &--count {
             position: absolute;
             display: inline-block;
-            top: -12px;
-            left: -12px;
+            top: -10px;
+            left: -10px;
             color: black;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            padding: 0 0.1rem;
             // -webkit-text-stroke: 0.5px black;
             // text-shadow: 0 0 0.1rem black;
-            // width: min-content;
-            // background-color: #ccc;
+            max-width: max-content;
+            background-color: #f0f0f0;
         }
     }
 }

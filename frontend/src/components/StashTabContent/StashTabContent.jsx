@@ -27,7 +27,7 @@ const StashTabContent = ({ tabContent }) => {
                 </header>
             </section>
 
-                {showItems &&
+                { showItems &&
                     <ul className="StashTabContent__items">
                         {contentElement}
                     </ul>

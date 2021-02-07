@@ -16,5 +16,8 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
+        margin-top: 0.5rem;
+        height: 12rem;
+        overflow-y: scroll;
     }
 }

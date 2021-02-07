@@ -23,8 +23,7 @@ const TrackedTabs = (props) => {
     }, [trackedTabIndices])
 
     useEffect(() => {
-        if  (response) {
-            console.log(response);
+        if (response) {
             appendToTabContent(response);
         }
     }, [response])
@@ -36,10 +35,11 @@ const TrackedTabs = (props) => {
                 <h3>
                     Tracked tabs
                 </h3>
+                
                 { loading &&
                     <div className="TrackedTabs__fetching">Fetching tab contents...</div>
-                
                 }
+
                 { trackedTabsAtom.length > 0 && 
                     <input 
                         type="button" 
