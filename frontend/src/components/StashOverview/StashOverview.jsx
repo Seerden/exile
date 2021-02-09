@@ -3,10 +3,12 @@ import OverviewItem from './OverviewItem';
 import './style/StashOverview.scss';
 import { useRecoilState } from 'recoil';
 import { trackedTabsState } from 'state/stateAtoms'
+import useExpandToggle from "helpers/hooks/useExpandToggle";
 
 const StashOverview = (props) => {
     const { date, tabOverview } = JSON.parse(localStorage.getItem("tabOverview"));
     const [trackedTabsAtom, setTrackedTabsAtom] = useRecoilState(trackedTabsState);
+    const [isExpanded, toggleExpand] = useExpandToggle();
 
     const trackedTabsElement = trackedTabsAtom.map(tab => <span className="StashOverview__tracked--tab">{tab.n}</span>)
 
@@ -40,10 +42,18 @@ const StashOverview = (props) => {
                 }
             </header>
 
+            <button 
+                className="StashOverview__expand"
+                onClick={toggleExpand}
+            >
+                {isExpanded ? 'Close' : 'Expand'}
+            </button>
 
-            <div className="StashOverview__tabs">
-                {overviewItemElements?.length > 0 && overviewItemElements}
-            </div>
+            { isExpanded && 
+                <div className="StashOverview__tabs">
+                    {overviewItemElements?.length > 0 && overviewItemElements}
+                </div>
+            }
         </div>
     )
 }

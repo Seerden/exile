@@ -1,0 +1,6 @@
+@use '../../../shared';
+
+.ExpandButton {
+    @extend %shared-button;
+    width: 100%;
+}

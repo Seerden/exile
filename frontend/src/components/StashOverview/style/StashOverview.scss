@@ -23,4 +23,9 @@
     &__button {
         @extend %shared-button;
     }
+
+    &__expand {
+        @extend %shared-button;
+        width: 100%;
+    }
 }
