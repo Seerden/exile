@@ -2,6 +2,9 @@
 
 .StashOverview {
     @extend %shared-section;
+    
+    margin: 0;
+    margin-bottom: 1rem;
 
     &__header {
         display: flex;
@@ -17,7 +20,7 @@
         flex-wrap: wrap;
         justify-content: space-between;
 
-        padding: 1rem;
+        padding: 0.2rem;
     }
 
     &__button {
