@@ -3,13 +3,13 @@
 .AccountInfo {
     display: flex;
     flex-wrap: wrap;
-    
+
     flex-direction: column;
     justify-content: center;
     align-items: center;
     
     @extend %shared-section;
-    
+
     &__header {
         text-align: center;
     }

@@ -1,7 +1,6 @@
 // in development, keep all this state in localStorage
 // might eventually implement a database
 
-// -----
 // tabContentHistory localStorage entry is an array of objects
 
 // get tabContent from API

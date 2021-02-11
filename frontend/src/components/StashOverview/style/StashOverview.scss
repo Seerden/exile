@@ -3,9 +3,6 @@
 .StashOverview {
     @extend %shared-section;
     
-    margin: 0;
-    margin-bottom: 1rem;
-
     &__header {
         display: flex;
         justify-content: space-between;

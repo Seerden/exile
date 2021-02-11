@@ -3,28 +3,18 @@ export function getTabHistory() {
     return JSON.parse(localStorage.getItem("tabContentHistory"));
 }
 
-// compute total value difference between first and last ping in interval
-// and compute item progress (items gained/lost between pings)
-export function getProgressOverInterval(timeInterval) {
-    const pingsWithinInterval = getLatestPings(timeInterval);  // extract all pings within timeInterval from latest ping (includes latest ping)
+// get all the pings within timeInterval (in ms) from the latest ping (NOT within timeInterval from current datetime)
+export function getLatestPings(timeInterval) {
+    const tabHistory = getTabHistory();
 
-    if (pingsWithinInterval.length > 1) {
-        return computeProgressOverInterval(pingsWithinInterval[0], pingsWithinInterval[pingsWithinInterval.length-1])
+    const length = tabHistory.length;
+
+    if (length > 0) {
+        const latestPingDate = tabHistory[length-1].date;
+        const pingsInInterval = tabHistory.filter(historyEntry => new Date(latestPingDate) - new Date(historyEntry.date) < timeInterval )
+        return pingsInInterval
     }
-
-    return 'There are fewer than two pings in the specified time interval'
 }
-
-export function computeProgressOverInterval(firstPing, lastPing) {
-    firstPing = firstPing.items;
-    lastPing = lastPing.items;
-
-    const currencyDelta = getPingTotalValue(lastPing) - getPingTotalValue(firstPing);
-    const itemDelta = computePingDifference(firstPing, lastPing);
-
-    return { currencyDelta, itemDelta }
-}
-
 
 // reduce totalChaosValue of tabContentHistory entry 'ping'
 export function getPingTotalValue(ping) {
@@ -58,15 +48,25 @@ export function computePingDifference(firstPing, secondPing) {
     return difference
 }
 
-// get all the pings within timeInterval (in ms) from the latest ping (NOT within timeInterval from current datetime)
-export function getLatestPings(timeInterval) {
-    const tabHistory = getTabHistory();
+export function computeProgressOverInterval(firstPing, lastPing) {
+    firstPing = firstPing.items;
+    lastPing = lastPing.items;
 
-    const length = tabHistory.length;
+    const currencyDelta = getPingTotalValue(lastPing) - getPingTotalValue(firstPing);
+    const itemDelta = computePingDifference(firstPing, lastPing);
 
-    if (length > 0) {
-        const latestPingDate = tabHistory[length-1].date;
-        const pingsInInterval = tabHistory.filter(historyEntry => new Date(latestPingDate) - new Date(historyEntry.date) < timeInterval )
-        return pingsInInterval
+    return { currencyDelta, itemDelta }
+}
+
+
+// compute total value difference between first and last ping in interval
+// and compute item progress (items gained/lost between pings)
+export function getProgressOverInterval(timeInterval) {
+    const pingsWithinInterval = getLatestPings(timeInterval);  // extract all pings within timeInterval from latest ping (includes latest ping)
+
+    if (pingsWithinInterval.length > 1) {
+        return computeProgressOverInterval(pingsWithinInterval[0], pingsWithinInterval[pingsWithinInterval.length-1])
     }
+
+    return 'There are fewer than two pings in the specified time interval'
 }

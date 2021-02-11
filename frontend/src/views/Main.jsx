@@ -6,6 +6,7 @@ import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 import TabHistory from "components/TabHistory/TabHistory";
 
 import './style/Main.scss';
+import ValueGraph from "components/TabHistory/ValueGraph";
 
 const Main = (props) => {
     
@@ -19,6 +20,7 @@ const Main = (props) => {
             <div className="Main__body">
                 <TrackedTabs />
                 <TabHistory />
+                <ValueGraph width={500} height={250} margin={{x: 10, y: 10}} hoursToPlot={4} startFromZero={false} />
             </div>
         </div>
     )

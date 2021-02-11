@@ -47,7 +47,7 @@ const AccountInfo = (props) => {
         e.preventDefault();
         buildAndMakeRequest({  
             method: 'post',
-            data: JSON.parse(localStorage.getItem("accountInfo"))
+            data: accountInfo
         })
     }
 

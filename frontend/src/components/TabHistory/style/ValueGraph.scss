@@ -1,0 +1,16 @@
+@use '../../../shared';
+
+.ValueGraph {
+    @extend %shared-section;
+    position: relative;
+
+    svg {
+        display: flex;
+        margin: 0 auto
+    }
+
+    &__header {
+        @extend %shared-heading;
+    }
+
+}
