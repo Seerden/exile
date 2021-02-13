@@ -76,21 +76,27 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
             d = x0.valueOf() - getX(d0.value).valueOf() > getX(d1.value).valueOf() - x0.valueOf() ? d1 : d0;
         }
 
-        showTooltip({
-            tooltipLeft: {
-                y: timeScale(getX(d)),  // there are two tooltips: y indicates tooltip on data point itself, 
-                x: timeScale(getX(d))  // x indicates the x-axis tooltip
-            },
-            tooltipTop: {
-                y: yScale(d.value),
-                x: height - margin.y
-            },
-            tooltipData: {
-                y: +d.value.toFixed(0),
-                x: dayjs(getX(d)).format('DD/MM HH:mm')
-            }
-        })
-    }, [showTooltip, timeScale, yScale])
+        let tooltipDataY = d.value ? +d.value.toFixed(0) : null
+        let tooltipDataX = d ? dayjs(getX(d)).format('DD/MM HH:mm') : null;
+
+        if (data.length > 1) {
+            showTooltip({
+                tooltipLeft: {
+                    y: timeScale(getX(d)),  // there are two tooltips: y indicates tooltip on data point itself, 
+                    x: timeScale(getX(d))  // x indicates the x-axis tooltip
+                },
+                tooltipTop: {
+                    y: yScale(d.value),
+                    x: height - margin.y
+                },
+                tooltipData: {
+                    y: tooltipDataY,
+                    x: tooltipDataX
+                }
+            })
+        }
+
+    }, [showTooltip, timeScale, yScale, data])
 
     const { containerRef, TooltipInPortal } = useTooltipInPortal({
         detectBounds: false,
@@ -122,37 +128,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                         strokeWidth={2}
                         strokeOpacity={1}
                     />
-                    {/* <GridRows
-                        left={margin.x}
-                        scale={timeScale}
-                        width={width}
-                        strokeDasharray="0"
-                        stroke={'deepskyblue'}
-                        strokeOpacity={0.4}
-                        pointerEvents="none"
-                    />
-                    <GridColumns
-                        top={margin.y}
-                        scale={timeScale}
-                        height={height}
-                        strokeDasharray="1,3"
-                        stroke={'deepskyblue'}
-                        strokeOpacity={0.2}
-                        pointerEvents="none"
-                    />  */}
-                    {/* <AxisLeft
-                        scale={yScale}
-                        left={margin.x}
-                        tickStroke={'#ccc'}
-                        stroke={'#ccc'}
-                    />
-                    <AxisBottom
-                        top={height}
-                        scale={timeScale}
-                        tickStroke={'#ccc'}
-                        stroke={'#ccc'}
-                    /> */}
-
+                    
                     {data &&
                         data.map((d, i) => (
                             <circle
@@ -166,31 +142,12 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                         ))
                     }
 
-                    {/* {tooltipOpen &&
-                        <g>
-                            <Line
-                                from={{ x: tooltipLeft, y: margin.y }}
-                                to={{ x: tooltipLeft, y: height }}
-                                stroke={'#eee'}
-                                strokeWidth={2}
-                                pointerEvents="none"
-                            />
-                            <Line
-                                from={{ x: margin.left, y: tooltipTop }}
-                                to={{ x: width, y: tooltipTop }}
-                                stroke={'#eee'}
-                                strokeWidth={2}
-                                pointerEvents="none"
-                            />
-                        </g>
-                    } */}
-
-                    {tooltipOpen &&
+                    {tooltipOpen && 
                         <g>
                             <TooltipInPortal
                                 key={Math.random()}
                                 top={tooltipTop.y}
-                                left={tooltipLeft.y ?? 0}
+                                left={tooltipLeft.y}
                                 style={{
                                     ...defaultStyles,
                                     transform: 'translateX(-50%) translateY(-200%)',
