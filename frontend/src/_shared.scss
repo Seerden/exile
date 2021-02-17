@@ -13,6 +13,7 @@
 
     @media screen and (min-width: 1080px) {
         max-width: 70%;
+        gap: 1rem;
     }
 
 }
@@ -35,7 +36,7 @@
     &:hover {
         box-shadow: 0 0 0.3rem 0 $button-color-secondary;
         box-shadow: 0 0.4rem 0 -0.3rem $button-color-secondary;
-        transform: translateY(-1px);
+        // transform: translateY(-1px);
     }
 }
 

@@ -46,12 +46,12 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
 
     const timeScale = scaleTime({
         domain: [Math.min(...x), Math.max(...x)],
-        range: [margin.x, width - margin.x]
+        range: [0, width - margin.x]
     })
 
     const yScale = scaleLinear({
         domain: [startFromZero ? 0 : Math.min(...y), Math.max(...y)],
-        range: [height - margin.y, margin.y]
+        range: [height - margin.y, 0]
     })
 
     const bisectDate = bisector(d => new Date(d.date)).left;
@@ -67,7 +67,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
 
     const handleMouseOver = useCallback((e) => {
         const coords = localPoint(e);
-        const x0 = timeScale.invert(coords.x);
+        const x0 = timeScale.invert(coords.x - margin.x/2);
         const index = bisectDate(data, x0, 2);
         const d0 = data[index - 1] ?? 0
         const d1 = data[index] ?? 0
@@ -114,11 +114,11 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 ref={containerRef}
                 width={width}
                 height={height}
+                
                 onMouseMove={e => handleMouseOver(e)}
                 onMouseOut={hideTooltip}
             >
-                <Group top={0} left={0}>
-                    <rect x={0} y={0} width={width} height={height} fill={"#fff"} rx={3} ry={3} />
+                <Group top={margin.y/2} left={margin.x/2}>
                     <LinePath
                         data={data}
                         curve={curveMonotoneX}
@@ -129,6 +129,16 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                         strokeOpacity={1}
                     />
                     
+                    <AxisLeft 
+                        scale={yScale}
+                        numTicks={7}
+                    />
+                    <AxisBottom 
+                        top={height-margin.y} 
+                        scale={timeScale} 
+                        numTicks={7}
+                    />
+
                     {data &&
                         data.map((d, i) => (
                             <circle
@@ -146,8 +156,8 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                         <g>
                             <TooltipInPortal
                                 key={Math.random()}
-                                top={tooltipTop.y}
-                                left={tooltipLeft.y}
+                                top={margin.y/2 + tooltipTop.y}
+                                left={margin.x/2 + tooltipLeft.y}
                                 style={{
                                     ...defaultStyles,
                                     transform: 'translateX(-50%) translateY(-200%)',
@@ -158,8 +168,8 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                             </TooltipInPortal>
                             <TooltipInPortal
                                 key={Math.random()}
-                                top={tooltipTop.x}
-                                left={tooltipLeft.x}
+                                top={margin.y/2 + tooltipTop.x}
+                                left={margin.x/2 +tooltipLeft.x}
                                 style={{
                                     ...defaultStyles,
                                     transform: 'translateX(-50%)',

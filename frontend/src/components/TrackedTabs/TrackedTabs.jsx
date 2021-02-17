@@ -51,7 +51,7 @@ const TrackedTabs = (props) => {
     return (
         <div className="TrackedTabs">
             <header className="TrackedTabs__header">
-                <h3>
+                <h3 className="TrackedTabs__header--title">
                     Tracked tabs
                 </h3>
                 

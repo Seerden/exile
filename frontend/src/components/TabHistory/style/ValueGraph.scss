@@ -3,14 +3,19 @@
 .ValueGraph {
     // @extend %shared-section;
     position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    margin: auto;
 
     svg {
         display: flex;
-        margin: 0 auto
     }
 
     &__header {
         @extend %shared-heading;
+        text-align: center;
     }
 
 }

@@ -2,4 +2,7 @@
 
 .Tracked {
     @extend %shared-section;
+
+    display: grid;
+    grid-template-columns: 2fr 2fr;
 }
