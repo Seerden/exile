@@ -32,24 +32,31 @@ const StashOverview = (props) => {
                 <h3>
                     Pick tabs to track (max. 10)
                 </h3>
-                { trackedTabsAtom.length > 0 && 
-                    <input 
+
+                <button
+                    className="StashOverview__expand"
+                    onClick={toggleExpand}
+                >
+                    {isExpanded ? 'Close' : 'Expand'}
+                </button>
+
+                {trackedTabsAtom.length > 0 &&
+                    <input
                         onClick={handleTabSelectClick}
-                        className="StashOverview__button" 
-                        type="button" 
+                        className="StashOverview__button"
+                        type="button"
                         value="Confirm"
-                    /> 
+                    />
                 }
             </header>
 
-            <button 
-                className="StashOverview__expand"
-                onClick={toggleExpand}
-            >
-                {isExpanded ? 'Close' : 'Expand'}
-            </button>
+            <p className="StashOverview__info">
+                Make sure to re-submit your account info whenever you change your stash tab order in-game.
+            </p>
 
-            { isExpanded && 
+
+
+            { isExpanded &&
                 <div className="StashOverview__tabs">
                     {overviewItemElements?.length > 0 && overviewItemElements}
                 </div>

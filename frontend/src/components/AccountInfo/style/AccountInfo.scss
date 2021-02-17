@@ -8,7 +8,9 @@
     justify-content: center;
     align-items: center;
     
-    @extend %shared-section;
+    // @extend %shared-section;
+    min-width: 20rem;
+    align-self: start;
 
     &__header {
         text-align: center;

@@ -4,6 +4,15 @@ import path from 'path';
 
 const tabBaseUrl = 'https://www.pathofexile.com/character-window/get-stash-items'
 
+// get latest poe.ninja chaos values from json file
+function getLatestNinjaValuesFromJson() {
+    const loc = path.resolve('./helpers/api/ninjaChaosValues.json');
+    const ninjaChaosValues = JSON.parse(readFileSync(loc))
+    const latestChaosValues = ninjaChaosValues[ninjaChaosValues.length - 1]
+
+    return latestChaosValues
+}
+
 // #---- TAB OVERVIEW HELPERS
 // step 1: get complete overview of tabs from POE API
 export function getTabOverviewFromPoeApi(options) {
@@ -44,18 +53,32 @@ export function getTabFromPoeApi(options) {
 
     return axios
         .get(`${tabBaseUrl}?accountName=${accountName}&realm=pc&league=${league}&tabs=0&tabIndex=${tabIndex}`,
-            {
-                headers: {
-                    cookie: `POESESSID=${POESESSID}`
-                }
-            }
+            { headers: { cookie: `POESESSID=${POESESSID}` } }
         )
-        .then(res => res.data);
+        .then(res => res.data)
+        .catch(err => err)
 }
 
 export function getAndExtractItemsFromTab(options) {
     return getTabFromPoeApi(options)
         .then(data => data.items)
+        .catch(err => err);
+}
+
+function appendValueToItems(items) {
+    const latestChaosValues = getLatestNinjaValuesFromJson().chaosValues
+
+    return items.map(item => {
+        let entry = latestChaosValues.filter(entry => entry.name === item.typeLine);
+        let chaosValue = entry.length > 0 ? entry[0].chaosValue : 0;
+        const totalChaosValue = item.stackSize ? chaosValue * item.stackSize : chaosValue;
+
+        return {
+            ...item,
+            chaosValue,
+            totalChaosValue
+        }
+    })
 }
 
 export function getTabAndExtractPropsFromItems(options) {
@@ -65,28 +88,5 @@ export function getTabAndExtractPropsFromItems(options) {
             items = appendValueToItems(items)
             return items
         })
-}
-
-function getLatestNinjaValuesFromJson(){
-    const loc = path.resolve('./helpers/api/ninjaChaosValues.json');
-    const ninjaChaosValues = JSON.parse(readFileSync(loc))
-    const latestChaosValues = ninjaChaosValues[ninjaChaosValues.length-1]
-
-    return latestChaosValues
-}
-
-function appendValueToItems(items){ 
-    const latestChaosValues = getLatestNinjaValuesFromJson().chaosValues
-
-    return items.map(item => {
-        let entry = latestChaosValues.filter(entry => entry.name === item.typeLine);
-        let chaosValue = entry.length > 0 ? entry[0].chaosValue : 0;
-        const totalChaosValue = item.stackSize ? chaosValue*item.stackSize : chaosValue;
-
-        return {
-            ...item, 
-            chaosValue, 
-            totalChaosValue
-        }
-    })
+        .catch(err => err)
 }

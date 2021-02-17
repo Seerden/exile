@@ -20,7 +20,7 @@ const Main = (props) => {
             <div className="Main__body">
                 <TrackedTabs />
                 {/* <TabHistory /> */}
-                <ValueGraph width={300} height={150} margin={{x: 10, y: 10}} hoursToPlot={12} startFromZero={false} />
+                <ValueGraph width={300} height={150} margin={{x: 10, y: 10}} hoursToPlot={3} startFromZero={false} />
             </div>
         </div>
     )

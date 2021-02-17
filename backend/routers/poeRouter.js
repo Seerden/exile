@@ -2,6 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
+import { 
+    UserModel as User,
+    StashModel as Stash
+ } from '../db/db.js'
 
 import { 
     getAndParseTabOverview,
@@ -14,9 +18,19 @@ export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(bodyParser.urlencoded({ extended: true }));
 poeRouter.use(bodyParser.json());
 
+function logRequest(req, res, next) {
+    console.log(`${req.originalUrl} - ${JSON.stringify(req.body)}`);
+
+
+    next();
+}
+
+poeRouter.use(logRequest);
+
 poeRouter.get('/', (req, res) => {
     
 })
+
 
 poeRouter.post('/tab', (req, res) => {
     console.log(req.body);
@@ -25,13 +39,18 @@ poeRouter.post('/tab', (req, res) => {
 
     getTabAndExtractPropsFromItems(options)
         .then(parsedItems => res.send(parsedItems))
+        .catch(err => {
+            console.log(err.message);
+            res.status(520).send('Error fetching from POE API')
+        })
 
 })
 
 poeRouter.post('/tabs', async (req, res) => {
     const { accountName, POESESSID, league, indices } = req.body;
 
-    const tabContents = [];
+    let tabContents = [];
+    let err = false;
 
     for (let tabIndex of indices) {
         const options = { accountName, POESESSID, league, tabIndex }
@@ -39,11 +58,18 @@ poeRouter.post('/tabs', async (req, res) => {
             let tab = await getTabAndExtractPropsFromItems(options)
             tabContents.push(tab)
         } catch (err) {
-            res.status(500).send('Error fetching tab content')
+            res.status(520).send('Error fetching tab content from POE API.')
+            err = true;
         }
     }
 
-    res.send(tabContents.flat())
+    tabContents = tabContents.flat();
+
+    if (!err) {
+        res.send(tabContents)
+    } else {
+        console.log('Error fetching tab content from POE API.');
+    }
 
 })
 

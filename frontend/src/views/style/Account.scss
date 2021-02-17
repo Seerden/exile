@@ -1,0 +1,15 @@
+@use '../../shared';
+
+.Account {
+    @extend %shared-section;
+
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+
+    }
+    height: 15rem;
+    // overflow-y: scroll;
+}

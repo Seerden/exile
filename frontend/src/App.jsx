@@ -7,7 +7,9 @@ import StashOverview from "components/StashOverview/StashOverview";
 import Home from "components/Home/Home"
 import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 import TabHistory from "components/TabHistory/TabHistory";
+
 import Main from "views/Main";
+import AccountView from 'views/Account';
 
 const App = (props) => {
     
@@ -18,9 +20,7 @@ const App = (props) => {
                 <Router>
                     <Routes>
                         <Route path="/" element={
-                            <>
-                                <Main />
-                            </>
+                            <AccountView />
                         } 
                         />
                     </Routes>

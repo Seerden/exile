@@ -84,6 +84,10 @@ const TrackedTabs = (props) => {
             { response && 
                 <StashTabContent tabContent={response} />
             }
+
+            { error && 
+                <div>Error fetching from API</div>
+            }
         </div>
     )
 }
