@@ -18,9 +18,31 @@
 
     &__button {
         @extend %shared-button;
+
+        &--on {
+            margin-right: 0.5rem;
+            border-color: seagreen;
+            animation: pulse 6500ms ease infinite;
+            animation-fill-mode: forwards;
+            outline: 2px solid transparent;
+        }
     }
 
     &__fetching {
         @extend %shared-fetching
+    }
+}
+
+@keyframes pulse {
+    25% {
+        outline-color: transparent;
+    }
+
+    50% {
+        outline-color: seagreen;
+    }
+
+    75% {
+        outline-color: transparent;
     }
 }

@@ -64,7 +64,7 @@ const TrackedTabs = (props) => {
                         <span>
                             <input 
                                 type="button" 
-                                className="TrackedTabs__button"
+                                className={`TrackedTabs__button ${autoFetch ? 'TrackedTabs__button--on' : ''}`}
                                 value={autoFetch ? 'Turn off auto fetch' : 'Turn on auto fetch'}
                                 onClick={toggleAutoFetch}
                             />
