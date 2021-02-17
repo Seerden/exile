@@ -1,12 +1,12 @@
 @use '../../../shared';
 
 .TrackedTabs {
-    @extend %shared-section;
+    // @extend %shared-section;
 
     &__header {
+        @extend %shared-heading;
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid #ccc;
         padding-bottom: 0.6rem;
         align-items: center
     }

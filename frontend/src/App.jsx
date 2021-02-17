@@ -10,6 +10,7 @@ import TabHistory from "components/TabHistory/TabHistory";
 
 import Main from "views/Main";
 import AccountView from 'views/Account';
+import TrackedView from 'views/Tracked';
 
 const App = (props) => {
     
@@ -20,7 +21,10 @@ const App = (props) => {
                 <Router>
                     <Routes>
                         <Route path="/" element={
-                            <AccountView />
+                            <>
+                                <AccountView />
+                                <TrackedView />
+                            </>
                         } 
                         />
                     </Routes>

@@ -2,13 +2,17 @@
 
 .StashOverview {
     // @extend %shared-section;
+    height: max-content;
 
     &__header {
-        display: flex;
+        @extend %shared-heading;
         justify-content: space-between;
-        align-items: center;
-        padding-bottom: 0.6rem;
-        border-bottom: 1px solid #ccc;
+        display: flex;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        // padding-bottom: 0.6rem;
+        // border-bottom: 1px solid #ccc;
         height: 2rem;
     }
 
@@ -19,8 +23,11 @@
 
         padding: 0.2rem;
 
-        max-height: 7rem;
-        overflow-y: scroll
+        @media screen and (min-width: 768px) {
+            max-height: 8rem;
+            overflow-y: scroll;
+        }
+        
     }
 
     &__button {

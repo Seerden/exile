@@ -1,7 +1,7 @@
 @use '../../../shared';
 
 .ValueGraph {
-    @extend %shared-section;
+    // @extend %shared-section;
     position: relative;
 
     svg {

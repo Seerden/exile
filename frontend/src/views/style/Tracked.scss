@@ -1,0 +1,5 @@
+@use '../../shared';
+
+.Tracked {
+    @extend %shared-section;
+}
