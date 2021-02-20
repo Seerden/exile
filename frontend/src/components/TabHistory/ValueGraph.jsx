@@ -17,23 +17,24 @@ import { bisector } from 'd3-array';
 function makeData(hoursToPlot) {
     let tabHistory = getTabHistory();
 
-    const data = tabHistory
-        .map(entry => {
-            return {
-                date: entry.date,
-                value: getPingTotalValue(entry.items)
-            }
-        })
+    if(tabHistory) {
+        const data = tabHistory
+            .map(entry => {
+                return {
+                    date: entry.date,
+                    value: getPingTotalValue(entry.items)
+                }
+            })
+    
+        let lastDate = new Date(data[data.length - 1].date);
+        let filteredData = hoursToPlot ? data.filter(entry => lastDate - new Date(entry.date) < 1000 * 60 * 60 * hoursToPlot) : data;
 
-    let lastDate = new Date(data[data.length - 1].date);
-
-    let filteredData = hoursToPlot ? data.filter(entry => lastDate - new Date(entry.date) < 1000 * 60 * 60 * hoursToPlot) : data;
-
-    return filteredData
+        return filteredData
+    }
 }
 
 function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
-    const data = makeData(hoursToPlot);
+    const data = makeData(hoursToPlot) || [];
 
     const getAllX = data => data.map(entry => new Date(entry.date))
     const getAllY = data => data.map(entry => +entry.value.toFixed(1))
@@ -67,7 +68,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
 
     const handleMouseOver = useCallback((e) => {
         const coords = localPoint(e);
-        const x0 = timeScale.invert(coords.x - margin.x/2);
+        const x0 = timeScale.invert(coords.x - margin.x / 2);
         const index = bisectDate(data, x0, 2);
         const d0 = data[index - 1] ?? 0
         const d1 = data[index] ?? 0
@@ -109,80 +110,83 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 <h3>Tab value over time</h3>
             </header>
 
-            <svg
-                key={Math.random()}
-                ref={containerRef}
-                width={width}
-                height={height}
-                
-                onMouseMove={e => handleMouseOver(e)}
-                onMouseOut={hideTooltip}
-            >
-                <Group top={margin.y/2} left={margin.x/2}>
-                    <LinePath
-                        data={data}
-                        curve={curveMonotoneX}
-                        x={d => timeScale(getX(d))}
-                        y={d => yScale(getY(d))}
-                        stroke={"black"}
-                        strokeWidth={2}
-                        strokeOpacity={1}
-                    />
-                    
-                    <AxisLeft 
-                        scale={yScale}
-                        numTicks={7}
-                    />
-                    <AxisBottom 
-                        top={height-margin.y} 
-                        scale={timeScale} 
-                        numTicks={7}
-                    />
+            {data.length > 1 &&
 
-                    {data &&
-                        data.map((d, i) => (
-                            <circle
-                                key={`circle-${i}`}
-                                r={3}
-                                cx={timeScale(getX(d))}
-                                cy={yScale(getY(d))}
-                                stroke={"black"}
-                                fill={"white"}
-                            />
-                        ))
-                    }
+                <svg
+                    key={Math.random()}
+                    ref={containerRef}
+                    width={width}
+                    height={height}
 
-                    {tooltipOpen && 
-                        <g>
-                            <TooltipInPortal
-                                key={Math.random()}
-                                top={margin.y/2 + tooltipTop.y}
-                                left={margin.x/2 + tooltipLeft.y}
-                                style={{
-                                    ...defaultStyles,
-                                    transform: 'translateX(-50%) translateY(-200%)',
-                                    transition: 'all 100ms linear'
-                                }}
-                            >
-                                {tooltipData.y}<em>c</em>
-                            </TooltipInPortal>
-                            <TooltipInPortal
-                                key={Math.random()}
-                                top={margin.y/2 + tooltipTop.x}
-                                left={margin.x/2 +tooltipLeft.x}
-                                style={{
-                                    ...defaultStyles,
-                                    transform: 'translateX(-50%)',
-                                    textAlign: 'center',
-                                    transition: 'all 100ms linear'
-                                }}
-                            >
-                                {tooltipData.x}
-                            </TooltipInPortal>
-                        </g>
-                    }
-                </Group>
-            </svg>
+                    onMouseMove={e => handleMouseOver(e)}
+                    onMouseOut={hideTooltip}
+                >
+                    <Group top={margin.y / 2} left={margin.x / 2}>
+                        <LinePath
+                            data={data}
+                            curve={curveMonotoneX}
+                            x={d => timeScale(getX(d))}
+                            y={d => yScale(getY(d))}
+                            stroke={"black"}
+                            strokeWidth={2}
+                            strokeOpacity={1}
+                        />
+
+                        <AxisLeft
+                            scale={yScale}
+                            numTicks={7}
+                        />
+                        <AxisBottom
+                            top={height - margin.y}
+                            scale={timeScale}
+                            numTicks={7}
+                        />
+
+                        {data &&
+                            data.map((d, i) => (
+                                <circle
+                                    key={`circle-${i}`}
+                                    r={3}
+                                    cx={timeScale(getX(d))}
+                                    cy={yScale(getY(d))}
+                                    stroke={"black"}
+                                    fill={"white"}
+                                />
+                            ))
+                        }
+
+                        {tooltipOpen &&
+                            <g>
+                                <TooltipInPortal
+                                    key={Math.random()}
+                                    top={margin.y / 2 + tooltipTop.y}
+                                    left={margin.x / 2 + tooltipLeft.y}
+                                    style={{
+                                        ...defaultStyles,
+                                        transform: 'translateX(-50%) translateY(-200%)',
+                                        transition: 'all 100ms linear'
+                                    }}
+                                >
+                                    {tooltipData.y}<em>c</em>
+                                </TooltipInPortal>
+                                <TooltipInPortal
+                                    key={Math.random()}
+                                    top={margin.y / 2 + tooltipTop.x}
+                                    left={margin.x / 2 + tooltipLeft.x}
+                                    style={{
+                                        ...defaultStyles,
+                                        transform: 'translateX(-50%)',
+                                        textAlign: 'center',
+                                        transition: 'all 100ms linear'
+                                    }}
+                                >
+                                    {tooltipData.x}
+                                </TooltipInPortal>
+                            </g>
+                        }
+                    </Group>
+                </svg>
+            }
         </div>
     )
 }

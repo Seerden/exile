@@ -24,6 +24,7 @@ const StashOverview = (props) => {
 
     const handleTabSelectClick = useCallback(() => {
         localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
+        alert('Tab selection updated')
     }, [trackedTabsAtom])
 
     return (
