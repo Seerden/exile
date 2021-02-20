@@ -5,7 +5,10 @@ import path from 'path';
 import 'dotenv/config.js';
 import axios from 'axios';
 
-import { StashModel as Stash } from '../db/db.js'
+import { 
+    StashModel as Stash,
+    StashValueModel as StashValue
+} from '../db/db.js'
 
 /**
  * Express router for /db routes, used as API endpoints for frontend interaction with the database.
@@ -20,7 +23,9 @@ dbRouter.get('/', (req, res) => {
 
 // Stash Content interaction
 //  note that POSTing stash state is handled in poeRouter, since that's where we grab the data from the POE API
-dbRouter.get('/stash', (req, res) => {
-
+dbRouter.get('/stashvalue', (req, res) => {
+    StashValue.findOne({ accountName: req.query.accountName }, (err, doc) => {
+        res.send(doc)
+    })
 })
 

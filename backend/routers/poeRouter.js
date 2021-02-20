@@ -4,15 +4,21 @@ import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 import { 
     UserModel as User,
-    StashModel as Stash
+    StashModel as Stash,
+    StashValueModel as StashValue
  } from '../db/db.js'
-
 import { 
     getAndParseTabOverview,
-    getTabAndExtractPropsFromItems
+    getTabAndExtractPropsFromItems,
+    extractTotalChaosValue
 } from '../helpers/api/poeApi.js';
+import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
+
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
-import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
+import { 
+    getAndParseAllItemPagesToChaos,
+    getItemPageAndParseToChaos
+} from '../helpers/api/ninjaApi';
 
 export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -20,8 +26,6 @@ poeRouter.use(bodyParser.json());
 
 function logRequest(req, res, next) {
     console.log(`${req.originalUrl} - ${JSON.stringify(req.body)}`);
-
-
     next();
 }
 
@@ -31,20 +35,6 @@ poeRouter.get('/', (req, res) => {
     
 })
 
-
-poeRouter.post('/tab', (req, res) => {
-    console.log(req.body);
-    // const { accountName, POESESSID, league, tabIndex } = req.body;
-    const options = req.body;
-
-    getTabAndExtractPropsFromItems(options)
-        .then(parsedItems => res.send(parsedItems))
-        .catch(err => {
-            console.log(err.message);
-            res.status(520).send('Error fetching from POE API')
-        })
-
-})
 
 poeRouter.post('/tabs', async (req, res) => {
     const { accountName, POESESSID, league, indices } = req.body;
@@ -66,6 +56,25 @@ poeRouter.post('/tabs', async (req, res) => {
     tabContents = tabContents.flat();
 
     if (!err) {
+        StashValue.findOne({accountName, league}, (err, doc) => {
+            if (!doc) {
+                const newEntry = new StashValue({league, accountName, value: [{date: new Date, totalChaosValue: extractTotalChaosValue(tabContents)}]})
+                newEntry.save((err, saved) => {
+                    saved && console.log('StashValue entry saved');
+                });
+            } else {
+                if(doc.value.length > 0) {
+                    doc.value.push({date: new Date(), totalChaosValue: extractTotalChaosValue(tabContents)})
+                    doc.save();
+                } else {
+                    doc.value = [{date: new Date(), totalChaosValue: extractTotalChaosValue(tabContents)}]
+                    doc.save();
+                }
+            }
+
+            console.log('StashValue entry created or updated');
+        })
+        
         res.send(tabContents)
     } else {
         console.log('Error fetching tab content from POE API.');

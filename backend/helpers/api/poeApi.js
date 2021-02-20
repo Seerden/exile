@@ -90,3 +90,7 @@ export function getTabAndExtractPropsFromItems(options) {
         })
         .catch(err => err)
 }
+
+export function extractTotalChaosValue(tabContents) {
+    return +tabContents.reduce((acc, cur) => acc + cur.totalChaosValue, 0).toFixed(0) || 0
+}
