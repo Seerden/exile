@@ -1,7 +1,7 @@
 import React from "react";
 
 import AccountInfo from 'components/AccountInfo/AccountInfo';
-import StashOverview from 'components/StashOverview/StashOverview';
+import TabList from 'components/TabList/TabList';
 import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 import TabHistory from "components/TabHistory/TabHistory";
 
@@ -14,7 +14,7 @@ const Main = (props) => {
         <div className="Main">
             <div className="Main__header">
                 <AccountInfo />
-                <StashOverview />
+                <TabList />
             </div>
 
             <div className="Main__body">
