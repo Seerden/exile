@@ -13,9 +13,6 @@ export function getItemPageFromNinjaApi(league, itemType) {
 export function getItemPageAndParseToChaos(league, itemType) {
     return getItemPageFromNinjaApi(league, itemType)
         .then(lines => {
-            // if (!lines.length > 0) {
-            //     console.log(itemType);
-            // }
             return lines.map(item => ({
                 name: item.name || item.currencyTypeName,
                 chaosValue: item.chaosValue || item.chaosEquivalent

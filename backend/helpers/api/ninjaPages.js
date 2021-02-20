@@ -13,13 +13,13 @@ const itemTypes = [
     // "SkillGem", 
     // "Base Type", 
     // "Helmet Enchant", 
-    "UniqueMap", 
+    // "UniqueMap", 
     // "Map", 
-    "UniqueJewel", 
-    "UniqueFlask", 
+    // "UniqueJewel", 
+    // "UniqueFlask", 
     // "Unique Weapon", 
     // "Unique Armour", 
-    "UniqueAccessory", 
+    // "UniqueAccessory", 
     // "Beast", 
     "Vial"
 ]
