@@ -21,11 +21,18 @@ const TrackedTabs = (props) => {
             method: "post",
             data: { accountName, league, POESESSID, indices: trackedTabIndices }
         })
-    }, [trackedTabIndices])
+    }, [trackedTabIndices, accountInfoAtom])
 
     const toggleAutoFetch = useCallback(() => {
         setAutoFetch(cur => !cur)
     }, [autoFetch])
+
+    useEffect(() => {
+        // temporary DEV fix: 
+        //      on liveserver reload, requestTrackedTabContents() will fire if a request had previously been made
+        //      this effect ensures that initial request doesn't fire
+        makeRequest(false);
+    }, [])
 
     useEffect(() => {
         if (response) {
@@ -33,10 +40,11 @@ const TrackedTabs = (props) => {
         }
     }, [response])
 
-    useEffect(() => {  // if autoFetch is true, periodically fetch contents of tracked tabs
+    useEffect(() => {
+        // if autoFetch is true, periodically fetch contents of tracked tabs
+        // if autoFetch is false, clear any possibly remaining tab fetching intervals
         if (autoFetch) {
-            console.log('triggering interval');
-            let interval = 1000*60*5 // static 5 minute interval for now. might eventually want to implement client.txt tracking instead
+            let interval = 1000 * 60 * 5 // static 5 minute interval for now. might eventually want to implement POE client.txt tracking instead
             intervals.current.push(setInterval(() => {
                 requestTrackedTabContents();
             }, interval))
@@ -54,39 +62,45 @@ const TrackedTabs = (props) => {
                 <h3 className="TrackedTabs__header--title">
                     Tracked tabs
                 </h3>
-                
-                { loading &&
-                    <div className="TrackedTabs__fetching">Fetching tab contents...</div>
+
+                {loading &&
+                    <div
+                        className="TrackedTabs__fetching"
+                    >
+                        Fetching tab contents...
+                    </div>
                 }
 
-                { trackedTabsAtom.length > 0 && 
+                {trackedTabsAtom.length > 0 &&
                     <div>
                         <span>
-                            <input 
-                                type="button" 
+                            <input
+                                type="button"
                                 className={`TrackedTabs__button ${autoFetch ? 'TrackedTabs__button--on' : ''}`}
                                 value={autoFetch ? 'Turn off auto fetch' : 'Turn on auto fetch'}
                                 onClick={toggleAutoFetch}
                             />
                         </span>
 
-                        <input 
-                            type="button" 
+                        <input
+                            type="button"
                             className="TrackedTabs__button"
                             value="Fetch manually"
                             onClick={requestTrackedTabContents}
                         />
-                        
+
                     </div>
                 }
             </header>
 
-            { response && 
+            { response &&
                 <StashTabContent tabContent={response} />
             }
 
-            { error && 
-                <div>Error fetching from API</div>
+            { error &&
+                <div>
+                    Error fetching from API
+                </div>
             }
         </div>
     )

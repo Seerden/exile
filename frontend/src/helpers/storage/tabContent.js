@@ -38,3 +38,7 @@ export function appendToTabContent(tabContentPing) {
     const stringifiedTabHistory = JSON.stringify(tabContentHistory);
     localStorage.setItem("tabContentHistory", stringifiedTabHistory);
 }
+
+export function extractTotalChaosValue(tabContent) {
+    return +tabContent.reduce((acc, cur) => acc + cur.totalChaosValue, 0).toFixed(0) || 0
+}

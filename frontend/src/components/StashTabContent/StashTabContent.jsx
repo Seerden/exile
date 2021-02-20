@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import StashTabItem from './StashTabItem';
+import { extractTotalChaosValue } from 'helpers/storage/tabContent'
 import './style/StashTabContent.scss';
 
 const StashTabContent = ({ tabContent }) => {
     const [showItems, setShowItems] = useState(true);
 
-    const totalTabValue = +tabContent.reduce((acc, cur) => acc + cur.totalChaosValue, 0).toFixed(1)
+    const totalTabValue = extractTotalChaosValue(tabContent);
 
     const contentElement = tabContent
         .sort((a, b) => {
