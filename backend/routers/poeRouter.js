@@ -4,7 +4,7 @@ import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 
 import { UserModel as User, StashModel as Stash, StashValueModel as StashValue } from '../db/db.js'
-import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents } from '../helpers/api/poeApi.js';
+import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray } from '../helpers/api/poeApi.js';
 import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
 import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
@@ -35,14 +35,23 @@ poeRouter.post('/tabs', async (req, res) => {
         const options = { accountName, POESESSID, league, tabIndex }
         try {
             let tab = await getTabAndExtractPropsFromItems(options)
-            tabContents.push(tab)
+            if (tab[0]?.typeLine) {
+                tabContents.push(tab)
+            } else {
+                err = true;
+                break;
+            }
         } catch (error) {
             err = true;
+            console.log(error);
             res.status(520).send('Error fetching tab content from POE API.')
         }
     }
 
-    let stacked = makeStackedContents(tabContents.flat())
+    tabContents = tabContents.flat();
+
+    let stackedObject = makeStackedContents(tabContents);
+    let stacked = makeStackedArray(stackedObject)
 
     if (!err) {
         StashValue.findOne({accountName, league: league.toLowerCase()}, (err, doc) => {
@@ -65,7 +74,7 @@ poeRouter.post('/tabs', async (req, res) => {
         })
         res.send(stacked)
     } else {
-        console.log('Error fetching tab content from POE API.');
+        res.status(502).send('Error fetching from POE API')
     }
 
 })

@@ -40,5 +40,5 @@ export function appendToTabContent(tabContentPing) {
 }
 
 export function extractTotalChaosValue(tabContent) {
-    return +tabContent.reduce((acc, cur) => acc + cur.totalChaosValue, 0).toFixed(0) || 0
+    return +tabContent.reduce((acc, cur) => acc + (cur.chaosValue * cur.stackSize), 0).toFixed(0) || 0
 }

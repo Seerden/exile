@@ -23,7 +23,7 @@ export function getTabOverviewFromPoeApi(options) {
             headers: { cookie: `POESESSID=${POESESSID}` }
         })
         .then(res => res.data)
-        .catch(console.log)
+        .catch(err => err)
 }
 
 // step 2: take complete tab overview and extract name, colour, type
@@ -55,14 +55,20 @@ export function getTabFromPoeApi(options) {
         .get(`${tabBaseUrl}?accountName=${accountName}&realm=pc&league=${league}&tabs=0&tabIndex=${tabIndex}`,
             { headers: { cookie: `POESESSID=${POESESSID}` } }
         )
-        .then(res => res.data)
+        .then(res => {
+            return res.data
+        })
         .catch(err => err)
 }
 
 export function getAndExtractItemsFromTab(options) {
     return getTabFromPoeApi(options)
-        .then(data => data.items)
-        .catch(err => err);
+        .then(data => {
+            if (data.items) {
+                return data.items
+            } else { return null }
+        })
+        .catch(err => console.log(err));
 }
 
 function appendValueToItems(items) {
@@ -84,9 +90,11 @@ function appendValueToItems(items) {
 export function getTabAndExtractPropsFromItems(options) {
     return getAndExtractItemsFromTab(options)
         .then(items => {
-            items = items.map(({ typeLine, stackSize, icon }) => ({ typeLine, stackSize, icon }))
-            items = appendValueToItems(items)
-            return items
+            if (items.length > 0) {
+                items = items.map(({ typeLine, stackSize, icon }) => ({ typeLine, stackSize, icon }))
+                items = appendValueToItems(items)
+                return items
+            }
         })
         .catch(err => err)
 }
@@ -112,4 +120,13 @@ export function makeStackedContents(tabContents) {
     }
 
     return stacked;
+}
+
+export function makeStackedArray(stacked) {
+    return Object.keys(stacked).map(item => ({
+        typeLine: item,
+        stackSize: stacked[item].stackSize,
+        chaosValue: stacked[item].chaosValue,
+        icon: stacked[item].icon
+    }))
 }

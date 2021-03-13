@@ -2,6 +2,8 @@ import React from "react";
 import './style/StashTabItem.scss'
 
 const StashTabItem = ({ item }) => {
+    const totalChaosValue = item.chaosValue * (item.stackSize || 1);
+    console.log(item, totalChaosValue);
 
     return (
         <li className="StashTabItem">
@@ -14,7 +16,7 @@ const StashTabItem = ({ item }) => {
                 /> 
 
                 <span className="StashTabItem__icon--value">
-                    {+item.totalChaosValue.toFixed(1)}<em>c</em> 
+                    {+totalChaosValue.toFixed(1)}<em>c</em> 
                 </span>
 
                 <span className="StashTabItem__icon--count">

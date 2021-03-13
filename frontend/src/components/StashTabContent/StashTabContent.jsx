@@ -13,7 +13,10 @@ const StashTabContent = (props) => {
 
     const contentElement = [...tabContent]
         .sort((a, b) => {
-            return a.totalChaosValue > b.totalChaosValue ? -1 : a.totalChaosValue === b.totalChaosValue ? 0 : 1
+            let aValue = a.chaosValue * (a.stackSize || 1);
+            let bValue = b.chaosValue * (b.stackSize || 1);
+
+            return aValue > bValue ? -1 : aValue === bValue ? 0 : 1
         })
         .map((item, index) => <StashTabItem key={`tab-entry-${index}`} item={item} />)
 
