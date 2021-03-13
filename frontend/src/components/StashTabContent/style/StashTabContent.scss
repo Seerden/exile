@@ -1,0 +1,23 @@
+@use '../../../shared';
+
+.StashTabContent {
+    // padding: 1rem;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__toggle {
+        @extend %shared-button
+    }
+
+    &__items {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 0.5rem;
+        height: 12rem;
+        overflow-y: scroll;
+    }
+}

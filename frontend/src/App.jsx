@@ -2,8 +2,15 @@ import React from "react";
 import { RecoilRoot } from 'recoil';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import AccountInfo from 'components/AccountInfo/AccountInfo';
-import StashOverview from "components/StashOverview/StashOverview";
+import AccountInfo from "components/AccountInfo/AccountInfo";
+import TabList from "components/TabList/TabList";
+import Home from "components/Home/Home"
+import TrackedTabs from "components/TrackedTabs/TrackedTabs";
+import TabHistory from "components/TabHistory/TabHistory";
+
+import Main from "views/Main";
+import AccountView from 'views/Account';
+import TrackedView from 'views/Tracked';
 
 const App = (props) => {
     
@@ -13,12 +20,13 @@ const App = (props) => {
                 
                 <Router>
                     <Routes>
-                        <Route path="/overview" element={ 
+                        <Route path="/" element={
                             <>
-                                <AccountInfo /> 
-                                <StashOverview />
+                                <AccountView />
+                                <TrackedView />
                             </>
-                        }/>
+                        } 
+                        />
                     </Routes>
                 </Router>
             </div>

@@ -1,0 +1,27 @@
+.TabListItem {
+    display: inline-flex;
+    
+    padding: 0.3rem 0.5rem;
+    min-width: 3rem;
+    // width: 7rem;
+    margin: 0.1rem;
+    font-size: 0.7rem;
+
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 0 0.1rem #ccc;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    transition: all 100ms linear;
+    background-color: white;
+
+    &:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+
+}

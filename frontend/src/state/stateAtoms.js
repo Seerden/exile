@@ -2,14 +2,24 @@ import { atom } from 'recoil';
 
 export const accountInfoState = atom({
     key: "accountInfoState",
-    default: {
+    default: JSON.parse(localStorage.getItem("accountInfo")) || {
         accountName: "",
-        league: "ritual",
+        league: "Ritual",
         POESESSID: ""
     }
 })
 
-export const stashOverviewState = atom({
-    key: "stashOverviewState",
-    default: null,
+export const trackedTabsState = atom({
+    key: "trackedTabsState",
+    default: JSON.parse(localStorage.getItem("trackedTabs")) || [],
+    effects_UNSTABLE: [
+        ({ onSet }) => {
+            onSet(state => console.log(state))
+        }
+    ]
+})
+
+export const tabContentState = atom({
+    key: "tabContentState",
+    default: [],
 })

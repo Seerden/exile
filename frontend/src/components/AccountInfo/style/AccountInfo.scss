@@ -1,4 +1,47 @@
+@use '../../../shared';
+
 .AccountInfo {
-    padding: 1rem;
-    border: 2px solid #222;
+    display: flex;
+    flex-wrap: wrap;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    // @extend %shared-section;
+    min-width: 20rem;
+    align-self: start;
+
+    &__header {
+        text-align: center;
+    }
+
+    &__form {
+        &--field {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        &--label {
+            display: inline-block;
+
+            width: 7rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: right;
+            margin-right: 0.5rem;
+        }
+
+        &--input {
+            width: 10rem;
+            padding: 0.3rem;
+            border: 1px solid #ccc
+        }
+
+        &--submit {
+            @extend %shared-button;
+            display: block;
+            margin: 0 auto;
+        }
+    }
 }

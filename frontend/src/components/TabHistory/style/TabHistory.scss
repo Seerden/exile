@@ -1,0 +1,32 @@
+@use '../../../shared';
+
+.TabHistory {
+    @extend %shared-section;
+
+    &__header {
+        @extend %shared-heading;
+    }
+
+    &__entry {
+        &--count {
+            display: inline-block;
+            width: 3rem;
+        }
+    }
+
+    &__diff {
+        &--list {
+            display: flex;
+            flex-wrap: wrap;
+
+            &--item {
+                width: 30%;
+                font-size: 0.85rem;
+
+                border: 1px solid #ccc;
+                margin: 0.2rem 0.5rem;
+                padding: 0.5rem;
+            }
+        }
+    }
+}

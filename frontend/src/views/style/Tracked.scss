@@ -1,0 +1,13 @@
+@use '../../shared';
+
+.Tracked {
+    @extend %shared-section;
+
+    display: grid;
+
+    @media screen and (min-width: 768px) {
+        grid-template-columns: 2fr 2fr;
+    }
+
+    grid-template-columns: 1fr;
+}
