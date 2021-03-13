@@ -8,7 +8,13 @@ const Tracked = (props) => {
     return (
         <div className="Tracked">
             <TrackedTabs />
-            <ValueGraph width={400} height={200} margin={{x: 100, y: 50}} hoursToPlot={6} startFromZero={false} />
+            <ValueGraph 
+                width={400} 
+                height={200} 
+                margin={{x: 100, y: 50}} 
+                hoursToPlot={0} 
+                startFromZero={false} 
+            />
         </div>
     )
 }

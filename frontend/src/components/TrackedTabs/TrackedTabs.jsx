@@ -2,16 +2,17 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from "react"
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { accountInfoState } from 'state/stateAtoms'
 import { useRequest } from 'helpers/hooks/requestHooks'
-import { trackedTabsState } from 'state/stateAtoms'
+import { trackedTabsState, tabContentState } from 'state/stateAtoms'
 import StashTabContent from "components/StashTabContent/StashTabContent";
 import './style/TrackedTabs.scss'
 import { appendToTabContent } from "helpers/storage/tabContent";
 
 const TrackedTabs = (props) => {
     const accountInfoAtom = useRecoilValue(accountInfoState);
-    const trackedTabsAtom = useRecoilValue(trackedTabsState)
-    const { accountName, league, POESESSID } = accountInfoAtom
-    const [makeRequest, response, error, loading] = useRequest({ url: '/poe/tabs' })
+    const trackedTabsAtom = useRecoilValue(trackedTabsState);
+    const [tabContentAtom, setTabContentAtom] = useRecoilState(tabContentState);
+    const { accountName, league, POESESSID } = accountInfoAtom;
+    const [makeRequest, response, error, loading] = useRequest({ url: '/poe/tabs' });
     const trackedTabIndices = useMemo(() => trackedTabsAtom.map(tab => tab.index), [trackedTabsAtom]);
     const [autoFetch, setAutoFetch] = useState(false);
     const intervals = useRef([]);
@@ -36,7 +37,9 @@ const TrackedTabs = (props) => {
 
     useEffect(() => {
         if (response) {
+            console.log('tabContent response', response);
             appendToTabContent(response);
+            setTabContentAtom(response);
         }
     }, [response])
 
@@ -44,7 +47,7 @@ const TrackedTabs = (props) => {
         // if autoFetch is true, periodically fetch contents of tracked tabs
         // if autoFetch is false, clear any possibly remaining tab fetching intervals
         if (autoFetch) {
-            let interval = 1000 * 60 * 5 // static 5 minute interval for now. might eventually want to implement POE client.txt tracking instead
+            let interval = 1000 * 60 * 8 // static interval for now. might eventually want to implement POE client.txt tracking instead
             intervals.current.push(setInterval(() => {
                 requestTrackedTabContents();
             }, interval))
@@ -94,7 +97,7 @@ const TrackedTabs = (props) => {
             </header>
 
             { response &&
-                <StashTabContent tabContent={response} />
+                <StashTabContent />
             }
 
             { error &&

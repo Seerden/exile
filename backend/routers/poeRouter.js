@@ -2,23 +2,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
-import { 
-    UserModel as User,
-    StashModel as Stash,
-    StashValueModel as StashValue
- } from '../db/db.js'
-import { 
-    getAndParseTabOverview,
-    getTabAndExtractPropsFromItems,
-    extractTotalChaosValue
-} from '../helpers/api/poeApi.js';
-import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
 
+import { UserModel as User, StashModel as Stash, StashValueModel as StashValue } from '../db/db.js'
+import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue } from '../helpers/api/poeApi.js';
+import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
-import { 
-    getAndParseAllItemPagesToChaos,
-    getItemPageAndParseToChaos
-} from '../helpers/api/ninjaApi';
+import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
 
 export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -40,25 +29,25 @@ poeRouter.post('/tabs', async (req, res) => {
     const { accountName, POESESSID, league, indices } = req.body;
 
     let tabContents = [];
-    let err = false;
+    let err;
 
     for (let tabIndex of indices) {
         const options = { accountName, POESESSID, league, tabIndex }
         try {
             let tab = await getTabAndExtractPropsFromItems(options)
             tabContents.push(tab)
-        } catch (err) {
-            res.status(520).send('Error fetching tab content from POE API.')
+        } catch (error) {
             err = true;
+            res.status(520).send('Error fetching tab content from POE API.')
         }
     }
 
     tabContents = tabContents.flat();
 
     if (!err) {
-        StashValue.findOne({accountName, league}, (err, doc) => {
+        StashValue.findOne({accountName, league: league.toLowerCase()}, (err, doc) => {
             if (!doc) {
-                const newEntry = new StashValue({league, accountName, value: [{date: new Date, totalChaosValue: extractTotalChaosValue(tabContents)}]})
+                const newEntry = new StashValue({league: league.toLowerCase(), accountName, value: [{date: new Date, totalChaosValue: extractTotalChaosValue(tabContents)}]})
                 newEntry.save((err, saved) => {
                     saved && console.log('StashValue entry saved');
                 });
@@ -74,7 +63,6 @@ poeRouter.post('/tabs', async (req, res) => {
 
             console.log('StashValue entry created or updated');
         })
-        
         res.send(tabContents)
     } else {
         console.log('Error fetching tab content from POE API.');

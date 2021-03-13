@@ -8,12 +8,17 @@ const StashTabItem = ({ item }) => {
             <div className="StashTabItem__icon">
                 <img 
                     className="StashTabItem__icon--image"
-                    alt={item.typeLine} 
+                    title={item.typeLine} 
+                    alt={item.typeLine}
                     src={item.icon} 
                 /> 
 
-                <span className="StashTabItem__icon--count">
+                <span className="StashTabItem__icon--value">
                     {+item.totalChaosValue.toFixed(1)}<em>c</em> 
+                </span>
+
+                <span className="StashTabItem__icon--count">
+                    {item.stackSize}
                 </span>
 
             </div>

@@ -15,7 +15,7 @@ const TabListItem = ({ tabProps }) => {
 
     const toggleTabSelection = useCallback(() => {
         // toggle tab selection (add if there aren't 10 tracked tabs yet, remove if tab is already being tracked)
-        if (!tabInTrackedTabs && trackedTabsAtom.length < 10) {
+        if (!tabInTrackedTabs && trackedTabsAtom.length < 15) {
             setTrackedTabsAtom([...trackedTabsAtom, tabProps])
         } else if (tabInTrackedTabs) {
             setTrackedTabsAtom(cur => cur.filter(tab => tab.index !== tabProps.index))

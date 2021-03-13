@@ -18,3 +18,8 @@ export const trackedTabsState = atom({
         }
     ]
 })
+
+export const tabContentState = atom({
+    key: "tabContentState",
+    default: [],
+})

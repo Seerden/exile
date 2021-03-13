@@ -1,7 +1,11 @@
-import React, { useMemo, useEffect, useCallback } from "react";
-import { getTabHistory, getPingTotalValue } from 'helpers/tabHistory';
-import './style/ValueGraph.scss';
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import dayjs from 'dayjs';
+import { useRecoilValue } from 'recoil';
+import { getTabHistory, getPingTotalValue } from 'helpers/tabHistory';
+import { tabContentState, accountInfoState } from 'state/stateAtoms';
+import { useRequest } from 'helpers/hooks/requestHooks';
+
+import './style/ValueGraph.scss';
 
 import { AreaClosed, Line, Bar, LinePath } from '@visx/shape';
 import { curveMonotoneX } from '@visx/curve';
@@ -14,18 +18,19 @@ import { localPoint } from "@visx/event";
 import { Tooltip, useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
 import { bisector } from 'd3-array';
 
-function makeData(hoursToPlot) {
-    let tabHistory = getTabHistory();
+function makeData(hoursToPlot, response) {
+    const stashValue = response.value;
 
-    if(tabHistory) {
-        const data = tabHistory
+    if (stashValue) {
+        const data = stashValue
             .map(entry => {
                 return {
                     date: entry.date,
-                    value: getPingTotalValue(entry.items)
+                    // value: getPingTotalValue(entry.items)  // was used when I used tabContent instead of storing stashValue in database
+                    value: entry.totalChaosValue
                 }
             })
-    
+
         let lastDate = new Date(data[data.length - 1].date);
         let filteredData = hoursToPlot ? data.filter(entry => lastDate - new Date(entry.date) < 1000 * 60 * 60 * hoursToPlot) : data;
 
@@ -34,13 +39,35 @@ function makeData(hoursToPlot) {
 }
 
 function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
-    const data = makeData(hoursToPlot) || [];
+    const [makeRequest, response, error, loading] = useRequest({ url: '/db/stashvalue' });
+    const tabContentAtom = useRecoilValue(tabContentState);
+    const accountInfoAtom = useRecoilValue(accountInfoState);
+    const [data, setData] = useState([]);
+    const [timeRange, setTimeRange] = useState(hoursToPlot)
 
-    const getAllX = data => data.map(entry => new Date(entry.date))
-    const getAllY = data => data.map(entry => +entry.value.toFixed(1))
+    useEffect(() => {  // fetch stashvalue from db on load, or when accountInfo or tabContent changes
+        if (accountInfoAtom) {
+            makeRequest({
+                method: 'get',
+                params: {
+                    accountName: accountInfoAtom.accountName
+                }
+            }
+            );
+        }
+    }, [accountInfoAtom, tabContentAtom]);
 
-    const x = getAllX(data);
-    const y = getAllY(data);
+    useEffect(() => {
+        if (response) {
+            setData(makeData(timeRange, response))
+        }
+    }, [response, timeRange])
+
+    const getAllX = data => data && data.map(entry => new Date(entry.date))
+    const getAllY = data => data && data.map(entry => +entry.value?.toFixed(1))
+
+    const x = useMemo(() => getAllX(data) || [0], [data]);
+    const y = useMemo(() => getAllY(data) || [0], [data]);
 
     const getX = d => new Date(d?.date).valueOf();
     const getY = d => +d?.value ?? 0;
@@ -57,16 +84,10 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
 
     const bisectDate = bisector(d => new Date(d.date)).left;
 
-    const {
-        tooltipData,
-        tooltipLeft,
-        tooltipTop,
-        tooltipOpen,
-        showTooltip,
-        hideTooltip,
-    } = useTooltip();
+    const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
 
     const handleMouseOver = useCallback((e) => {
+        if (!data) { return }
         const coords = localPoint(e);
         const x0 = timeScale.invert(coords.x - margin.x / 2);
         const index = bisectDate(data, x0, 2);
@@ -96,13 +117,9 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 }
             })
         }
-
     }, [showTooltip, timeScale, yScale, data])
 
-    const { containerRef, TooltipInPortal } = useTooltipInPortal({
-        detectBounds: false,
-        scroll: true,
-    })
+    const { containerRef, TooltipInPortal } = useTooltipInPortal({ detectBounds: false, scroll: true })
 
     return (
         <div className="ValueGraph">
@@ -110,7 +127,22 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 <h3>Tab value over time</h3>
             </header>
 
-            {data.length > 1 &&
+            <div>
+                <label 
+                    htmlFor="timeRange"
+                >
+                    Time range:
+                </label>
+                
+                <input 
+                    name="timeRange" 
+                    type="number" 
+                    onChange={(e) => e.target.value > 0 && setTimeRange(e.target.value)} 
+                    value={timeRange}
+                />
+            </div>
+
+            {data?.length > 1 &&
 
                 <svg
                     key={Math.random()}
@@ -146,7 +178,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                             data.map((d, i) => (
                                 <circle
                                     key={`circle-${i}`}
-                                    r={3}
+                                    r={2}
                                     cx={timeScale(getX(d))}
                                     cy={yScale(getY(d))}
                                     stroke={"black"}

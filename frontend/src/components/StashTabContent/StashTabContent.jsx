@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+import {useRecoilValue} from 'recoil';
+import {tabContentState} from 'state/stateAtoms';
 import StashTabItem from './StashTabItem';
 import { extractTotalChaosValue } from 'helpers/storage/tabContent'
 import './style/StashTabContent.scss';
 
-const StashTabContent = ({ tabContent }) => {
+const StashTabContent = (props) => {
     const [showItems, setShowItems] = useState(true);
+    const tabContent = useRecoilValue(tabContentState);
 
     const totalTabValue = extractTotalChaosValue(tabContent);
 
-    const contentElement = tabContent
+    const contentElement = [...tabContent]
         .sort((a, b) => {
             return a.totalChaosValue > b.totalChaosValue ? -1 : a.totalChaosValue === b.totalChaosValue ? 0 : 1
         })
