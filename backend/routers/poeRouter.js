@@ -4,7 +4,7 @@ import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 
 import { UserModel as User, StashModel as Stash, StashValueModel as StashValue } from '../db/db.js'
-import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue } from '../helpers/api/poeApi.js';
+import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents } from '../helpers/api/poeApi.js';
 import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
 import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
@@ -42,7 +42,7 @@ poeRouter.post('/tabs', async (req, res) => {
         }
     }
 
-    tabContents = tabContents.flat();
+    let stacked = makeStackedContents(tabContents.flat())
 
     if (!err) {
         StashValue.findOne({accountName, league: league.toLowerCase()}, (err, doc) => {
@@ -63,7 +63,7 @@ poeRouter.post('/tabs', async (req, res) => {
 
             console.log('StashValue entry created or updated');
         })
-        res.send(tabContents)
+        res.send(stacked)
     } else {
         console.log('Error fetching tab content from POE API.');
     }

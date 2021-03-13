@@ -94,3 +94,22 @@ export function getTabAndExtractPropsFromItems(options) {
 export function extractTotalChaosValue(tabContents) {
     return +tabContents.reduce((acc, cur) => acc + cur.totalChaosValue, 0).toFixed(0) || 0
 }
+
+export function makeStackedContents(tabContents) {
+    let stacked = {};
+
+    for (let item of tabContents) {
+        // console.log(item.typeLine);
+        if (!stacked[item.typeLine]) {
+            stacked[item.typeLine] = {
+                stackSize: item.stackSize || 1,
+                icon: item.icon,
+                chaosValue: item.chaosValue,
+            }
+        } else {
+            stacked[item.typeLine].stackSize += (item.stackSize || 1)
+        }
+    }
+
+    return stacked;
+}
