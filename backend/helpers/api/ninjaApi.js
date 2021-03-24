@@ -22,7 +22,7 @@ export function getItemPageAndParseToChaos(league, itemType) {
 
 export async function getAndParseAllItemPagesToChaos(league) {
     let chaosValues = [
-        { name: "Chaos Orb", chaosValue: 1 }
+        ...customPrices
     ];
 
     for (const itemType of [...itemObj, ...currencyObj]) {
@@ -34,3 +34,12 @@ export async function getAndParseAllItemPagesToChaos(league) {
 
     return chaosValues.flat();
 }
+
+const customPrices = [  // custom pricelist. @todo: allow user definition. place in proper location
+    { name: 'Chaos Orb', chaosValue: 1 },
+    { name: 'Foreboding Incubator', chaosValue: 4.5 },
+    { name: 'Fossilised Incubator', chaosValue: 0.5 },
+    { name: "Diviner's Incubator", chaosValue: 3.5 },
+    { name: "Geomancer's Incubator", chaosValue: 4 },
+    { name: "Skittering Incubator", chaosValue: 0.25 },
+]

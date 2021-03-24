@@ -3,7 +3,7 @@ const itemTypes = [
     "Watchstone", 
     "Invitation",
     "Oil", 
-    "Incubator",  // bad pricing on poe.ninja sometimes, leave out for now
+    // "Incubator",  // bad pricing on poe.ninja sometimes, leave out for now
     "Scarab", 
     "Fossil", 
     "Resonator", 

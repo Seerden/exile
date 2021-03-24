@@ -47,7 +47,7 @@ const TrackedTabs = (props) => {
         // if autoFetch is true, periodically fetch contents of tracked tabs
         // if autoFetch is false, clear any possibly remaining tab fetching intervals
         if (autoFetch) {
-            let interval = 1000 * 60 * 8 // static interval for now. might eventually want to implement POE client.txt tracking instead
+            let interval = 1000 * 60 * 4 // static interval for now. might eventually want to implement POE client.txt tracking instead
             intervals.current.push(setInterval(() => {
                 requestTrackedTabContents();
             }, interval))
