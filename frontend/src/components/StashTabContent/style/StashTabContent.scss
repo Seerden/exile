@@ -9,7 +9,8 @@
     }
 
     &__toggle {
-        @extend %shared-button
+        @extend %shared-button;
+        width: 6rem;
     }
 
     &__items {
@@ -18,6 +19,19 @@
         flex-wrap: wrap;
         margin-top: 0.5rem;
         height: 12rem;
+        gap: 0.6rem 0.2rem;
         overflow-y: scroll;
+
+        padding: 0.3rem;
+    }
+
+    &__filter {
+        &--label {
+            padding-right: 0.5rem;
+        }
+
+        &--input {
+            @extend %shared-input;
+        }
     }
 }

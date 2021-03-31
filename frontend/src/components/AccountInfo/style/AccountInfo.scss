@@ -33,9 +33,9 @@
         }
 
         &--input {
+            @extend %shared-input;
             width: 10rem;
-            padding: 0.3rem;
-            border: 1px solid #ccc
+            
         }
 
         &--submit {

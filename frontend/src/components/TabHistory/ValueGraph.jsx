@@ -174,7 +174,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                             numTicks={7}
                         />
 
-                        {/* {data &&
+                        {data &&
                             data.map((d, i) => (
                                 <circle
                                     key={`circle-${i}`}
@@ -185,7 +185,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                                     fill={"white"}
                                 />
                             ))
-                        } */}
+                        }
 
                         {tooltipOpen &&
                             <g>

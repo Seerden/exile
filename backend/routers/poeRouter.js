@@ -35,16 +35,12 @@ poeRouter.post('/tabs', async (req, res) => {
         const options = { accountName, POESESSID, league, tabIndex }
         try {
             let tab = await getTabAndExtractPropsFromItems(options)
-            if (tab[0]?.typeLine) {
+            if (tab && tab.length > 0) {
                 tabContents.push(tab)
-            } else {
-                err = true;
-                break;
             }
         } catch (error) {
             err = true;
             console.log(error);
-            res.status(520).send('Error fetching tab content from POE API.')
         }
     }
 

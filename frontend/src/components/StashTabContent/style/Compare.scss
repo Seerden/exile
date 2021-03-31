@@ -1,0 +1,12 @@
+.Compare {
+    border: 2px solid black;
+    max-width: 50vw;
+    display: flex;
+    margin: 0 auto;
+    padding: 1rem;
+
+    &__count {
+        display: inline-block;
+        width: 3rem;
+    }
+}

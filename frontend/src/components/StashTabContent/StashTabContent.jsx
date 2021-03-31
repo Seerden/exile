@@ -12,6 +12,7 @@ const StashTabContent = (props) => {
     const totalTabValue = extractTotalChaosValue(tabContent);
 
     const contentElement = useMemo(() => [...tabContent]
+        .filter(entry => entry.chaosValue > 0)
         .sort((a, b) => {
             let aValue = a.chaosValue * (a.stackSize || 1);
             let bValue = b.chaosValue * (b.stackSize || 1);
@@ -20,10 +21,11 @@ const StashTabContent = (props) => {
         })
         .map((item, index) => {
             return {
-                element: <StashTabItem key={`tab-entry-${index}`} item={item} />,
+                element: <StashTabItem key={`tab-entry-${index}-${item.typeLine}`} item={item} />,
                 typeLine: item.typeLine
             }
-        }), [tabContent]
+        }),
+        [tabContent]
     )
 
     const filteredTabContent = useMemo(() => {
@@ -34,7 +36,8 @@ const StashTabContent = (props) => {
             filteredElement = contentElement;
         }
 
-        return filteredElement.map(entry => entry.element)
+        return filteredElement
+            .map(entry => entry.element)
     }, [filter, tabContent])
 
     return (
@@ -51,12 +54,20 @@ const StashTabContent = (props) => {
                 </header>
             </section>
 
-            Filter by name:
-            <input
-                type="text"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-            />
+            <div className="StashTabContent__filter">
+                <label 
+                    htmlFor="StashTabContent__filter"
+                    className="StashTabContent__filter--label">
+                        Filter by name:
+                    </label>
+                <input
+                    name="StashTabContent__filter"
+                    className="StashTabContent__filter--input"
+                    type="text"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                />
+            </div>
 
             {showItems &&
                 <ul className="StashTabContent__items">

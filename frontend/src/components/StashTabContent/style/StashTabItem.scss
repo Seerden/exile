@@ -51,22 +51,29 @@
             position: absolute;
             display: inline-block;
             color: black;
-            max-width: max-content;
             background-color: #f0f0f0;
             font-size: 0.75rem;
             padding: 0 0.2rem;
+            user-select: none;
 
         }
 
         &--count {
             bottom: -7.5px;
             right: -10px;
-            padding: 0.2rem 0.3rem;
+            padding: 0.1rem 0.25rem;
+            box-shadow: 0 0 0.2rem #aaa;
+            font-size: 0.7rem;
+            max-width: max-content;
         }
 
         &--value {
+            display: inline-block;
+            justify-content: center;
+            max-width: 3.5rem;
             top: -10px;
             left: -10px;
+            box-shadow: 0 0 0.2rem #aaa;
         }
     }
 }
