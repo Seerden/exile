@@ -5,11 +5,12 @@ import { useRecoilState } from 'recoil';
 import { trackedTabsState } from 'state/stateAtoms'
 import useExpandToggle from "helpers/hooks/useExpandToggle";
 
+const defaultTabOverview = {
+    date: null,
+    tabOverview: []
+}
+
 const TabList = (props) => {
-    const defaultTabOverview = {
-        date: null,
-        tabOverview: []
-    }
     const { date, tabOverview } = JSON.parse(localStorage.getItem("tabOverview")) || defaultTabOverview;
     const [trackedTabsAtom, setTrackedTabsAtom] = useRecoilState(trackedTabsState);
     const [isExpanded, toggleExpand] = useExpandToggle();
@@ -59,8 +60,6 @@ const TabList = (props) => {
             <p className="TabList__info">
                 Make sure to re-submit your account info whenever you change your stash tab order in-game.
             </p>
-
-
 
             { isExpanded &&
                 <div className="TabList__tabs">

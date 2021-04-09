@@ -14,26 +14,19 @@ const TabListItem = ({ tabProps }) => {
     const tabInTrackedTabs = useMemo(() => trackedTabsAtom.filter(tab => tab.index === tabProps.index).length > 0, [trackedTabsAtom]);
 
     const toggleTabSelection = useCallback(() => {
-        // toggle tab selection (add if there aren't 10 tracked tabs yet, remove if tab is already being tracked)
-        if (!tabInTrackedTabs && trackedTabsAtom.length < 15) {
+        if (!tabInTrackedTabs && trackedTabsAtom.length < 15) {  // @note: 15 is an arbitrary limit
             setTrackedTabsAtom([...trackedTabsAtom, tabProps])
         } else if (tabInTrackedTabs) {
             setTrackedTabsAtom(cur => cur.filter(tab => tab.index !== tabProps.index))
         }
     }, [trackedTabsAtom])
 
-    function handleTabClick(e) {
-        // add or remove tab from list of tabs to track
-        e.preventDefault()
-        toggleTabSelection()
-    }
-
     return (
         <>
             <input
                 type="button"
                 className="TabListItem"
-                onClick={handleTabClick}
+                onClick={toggleTabSelection}
                 style={{
                     border: `2px solid rgb(${r}, ${g}, ${b})`,
                     backgroundColor: tabInTrackedTabs && 'deepskyblue'
