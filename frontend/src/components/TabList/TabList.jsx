@@ -3,7 +3,6 @@ import TabListItem from './TabListItem';
 import './style/TabList.scss';
 import { useRecoilState } from 'recoil';
 import { trackedTabsState } from 'state/stateAtoms'
-import useExpandToggle from "helpers/hooks/useExpandToggle";
 
 const defaultTabOverview = {
     date: null,
@@ -13,7 +12,12 @@ const defaultTabOverview = {
 const TabList = (props) => {
     const { date, tabOverview } = JSON.parse(localStorage.getItem("tabOverview")) || defaultTabOverview;
     const [trackedTabsAtom, setTrackedTabsAtom] = useRecoilState(trackedTabsState);
-    const [isExpanded, toggleExpand] = useExpandToggle();
+
+    const [isOpen, setIsOpen] = useState(true);
+    function toggleOpen(){
+        setIsOpen(cur => !cur)
+    }
+
     const maxTrackedTabCount = 15;
 
     const trackedTabsElement = trackedTabsAtom.map(tab => <span className="TabList__tracked--tab">{tab.n}</span>)
@@ -34,20 +38,32 @@ const TabList = (props) => {
     }, [trackedTabsAtom])
 
     return (
-        <div className="TabList">
+        <div 
+            className="TabList"
+            style={{display: !isOpen && 'none'}}   // @note: VERY WIP. Toggle rendering of the component from outside. hiding it is a quick workaround
+        >
             <header className="TabList__header">
                 <h3>
                     Pick tabs to track (max. {maxTrackedTabCount})
                 </h3>
 
-                <button
-                    className="TabList__expand"
-                    onClick={toggleExpand}
+                <button 
+                    onClick={toggleOpen}
+                    className="TabList__close"
                 >
-                    {isExpanded ? 'Close' : 'Expand'}
+                    Close
                 </button>
+            </header>
 
-                {trackedTabsAtom.length > 0 &&
+            <p className="TabList__info">
+                Make sure to re-submit your account info whenever you change your stash tab order in-game.
+            </p>
+
+            <div className="TabList__tabs">
+                {overviewItemElements?.length > 0 && overviewItemElements}
+            </div>
+
+            {trackedTabsAtom.length > 0 &&
                     <input
                         onClick={handleTabSelectClick}
                         className="TabList__button"
@@ -55,17 +71,6 @@ const TabList = (props) => {
                         value="Confirm"
                     />
                 }
-            </header>
-
-            <p className="TabList__info">
-                Make sure to re-submit your account info whenever you change your stash tab order in-game.
-            </p>
-
-            { isExpanded &&
-                <div className="TabList__tabs">
-                    {overviewItemElements?.length > 0 && overviewItemElements}
-                </div>
-            }
         </div>
     )
 }
