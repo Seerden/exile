@@ -7,9 +7,9 @@ interface MenuButtonProps {
 const MenuButton = ({ text }: MenuButtonProps) => {
 
     return (
-        <div className="MenuButton">
+        <li className="MenuButton">
             {text}
-        </div>
+        </li>
     )
 }
 
