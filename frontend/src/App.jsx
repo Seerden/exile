@@ -12,6 +12,7 @@ import Compare from "components/StashTabContent/Compare";
 import Main from "views/Main";
 import AccountView from 'views/Account';
 import TrackedView from 'views/Tracked';
+import Menu from "components/Menu/Menu";
 
 
 const App = (props) => {
@@ -24,6 +25,8 @@ const App = (props) => {
                     <Routes>
                         <Route path="/" element={
                             <>
+                                <Menu />
+
                                 <AccountView />
                                 <TrackedView />
                                 {/* <Compare /> */}

@@ -11,7 +11,7 @@ const StashTabContent = (props) => {
     const [filter, setFilter] = useState('');
     const totalTabValue = extractTotalChaosValue(tabContent);
 
-    const contentElement = useMemo(() => [...tabContent]
+    const stashContentElement = useMemo(() => [...tabContent]
         .filter(entry => entry.chaosValue > 0)
         .sort((a, b) => {
             let aValue = a.chaosValue * (a.stackSize || 1);
@@ -28,12 +28,12 @@ const StashTabContent = (props) => {
         [tabContent]
     )
 
-    const filteredTabContent = useMemo(() => {
+    const filteredStashContentElement = useMemo(() => {
         let filteredElement;
         if (filter?.length > 0) {
-            filteredElement = contentElement.filter(entry => entry.typeLine?.toLowerCase().includes(filter.toLowerCase()));
+            filteredElement = stashContentElement.filter(entry => entry.typeLine?.toLowerCase().includes(filter.toLowerCase()));
         } else {
-            filteredElement = contentElement;
+            filteredElement = stashContentElement;
         }
 
         return filteredElement
@@ -71,7 +71,7 @@ const StashTabContent = (props) => {
 
             {showItems &&
                 <ul className="StashTabContent__items">
-                    {filteredTabContent}
+                    {filteredStashContentElement}
                 </ul>
             }
         </div>
