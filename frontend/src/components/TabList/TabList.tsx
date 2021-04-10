@@ -40,7 +40,7 @@ const handleTabSelectClick = useCallback(() => {
 return (
     <div
         className="TabList"
-        style={{ display: !isOpen ? 'none' : '' }}   // @note: VERY WIP. Toggle rendering of the component from outside. hiding it is a quick workaround
+        style={{ display: !isOpen && 'none'} as Object}   // @note: VERY WIP. Toggle rendering of the component from outside. hiding it is a quick workaround
     >
         <header className="TabList__header">
             <h3>

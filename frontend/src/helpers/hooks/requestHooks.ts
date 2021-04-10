@@ -1,18 +1,26 @@
-import react, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 // axios.interceptors.request.use(request => {
 //     console.log('Starting Request', JSON.stringify(request, null, 2))
 //     return request
 // })
 
-export function useRequest({ url }) {
-    const [error, setError] = useState(null);
-    const [response, setResponse] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    const [options, setOptions] = useState(null);
-    const source = new axios.CancelToken.source();
+interface RequestOptions {
+    method?: "GET" | "POST" | "PUT" | "DELETE",
+    params?: Object,
+    data?: Object
+}
+
+type RequestReturnTuple = [React.Dispatch<React.SetStateAction<RequestOptions | null>>, AxiosResponse | null, AxiosError | null, boolean]
+
+export function useRequest({ url }: { url: string}): RequestReturnTuple {
+    const [error, setError] = useState<AxiosError | null>(null);
+    const [response, setResponse] = useState<AxiosResponse | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [mounted, setMounted] = useState<boolean>(false);
+    const [options, setOptions] = useState<RequestOptions | null>(null);
+    const source = axios.CancelToken.source();
 
 
     useEffect(() => {  // effect to track mount state, aids in canceling requests on unmount

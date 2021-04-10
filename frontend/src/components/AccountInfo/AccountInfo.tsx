@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useSetRecoilState } from 'recoil';
+import { useState, useEffect } from "react";
 import { useRequest } from "helpers/hooks/requestHooks";
 import './style/AccountInfo.scss';
 
-const leagueNameEnum = {
+const leagueNameEnum = {  // @todo: now I'm using TypeScript, turn into an actual ENUM
     "hardcore-ritual": "Hardcore Ritual",
     "hardcore-standard": "Hardcore Standard",
     "standard": "Standard",
@@ -24,7 +23,7 @@ function makeTabOverviewObjectForLocalStorage(tabOverviewResponse) {
 }
 
 const AccountInfo = (props) => {
-    const [accountInfo, setAccountInfo] = useState(JSON.parse(localStorage.getItem("accountInfo")) || defaultAccountInfo)
+    const [accountInfo, setAccountInfo] = useState(JSON.parse(localStorage.getItem("accountInfo")!) || defaultAccountInfo)
     const [buildAndMakeRequest, tabOverviewResponse, error, loading] = useRequest({ url: 'poe/tabs/overview' })
 
     useEffect(() => {  // if stash tab overview was grabbed from API successfully, update local storage
@@ -34,7 +33,7 @@ const AccountInfo = (props) => {
         }
     }, [tabOverviewResponse])
 
-    function handleAccountInfoFormFieldChange(e) {  // update accountInfo state on form field change
+    function handleAccountInfoFormFieldChange(e): void {  // update accountInfo state on form field change
         const { name, value } = e.currentTarget;
         const newValue = name === 'league' ? leagueNameEnum[value] : value;
         setAccountInfo(state => ({
@@ -43,10 +42,11 @@ const AccountInfo = (props) => {
         }))
     }
 
-    function handleAccountInfoFormSubmit(e) {  // grab stash tab overview
+    function handleAccountInfoFormSubmit(e): void {  // grab stash tab overview
         e.preventDefault();
-        buildAndMakeRequest({  
-            method: 'post',
+
+        buildAndMakeRequest({
+            method: 'POST',
             data: accountInfo
         })
     }
@@ -63,17 +63,17 @@ const AccountInfo = (props) => {
 
                     <div className="AccountInfo__form--field">
                         <label className="AccountInfo__form--label" htmlFor="accountName">Account Name:</label>
-                        <input className="AccountInfo__form--input" onChange={handleAccountInfoFormFieldChange} type="text" name="accountName" value={accountInfo.accountName} />
+                        <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="accountName" value={accountInfo.accountName} />
                     </div>
 
                     <div className="AccountInfo__form--field">
                         <label className="AccountInfo__form--label" htmlFor="league">League:</label>
                         <select
                             className="AccountInfo__form--input"
-                            onChange={handleAccountInfoFormFieldChange}
+                            onChange={e => handleAccountInfoFormFieldChange(e)}
                             name="league"
                         >
-                            <option default value="ritual">Ritual</option>
+                            <option selected value="ritual">Ritual</option>
                             <option value="hardcore-ritual">Hardcore Ritual</option>
                             <option value="standard">Standard</option>
                             <option value="hardcore-standard">Hardcore Standard</option>
@@ -82,20 +82,20 @@ const AccountInfo = (props) => {
 
                     <div className="AccountInfo__form--field">
                         <label className="AccountInfo__form--label" htmlFor="POESESSID">POESESSID:</label>
-                        <input className="AccountInfo__form--input" onChange={handleAccountInfoFormFieldChange} type="text" name="POESESSID" value={accountInfo.POESESSID} />
+                        <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="POESESSID" value={accountInfo.POESESSID} />
                     </div>
 
                     <button
-                        onClick={handleAccountInfoFormSubmit}
+                        onClick={e => handleAccountInfoFormSubmit(e)}
                         type="submit"
                         className="AccountInfo__form--submit"
                     >
                         Confirm and verify
                     </button>
                 </form>
-                { loading && <div>Checking account info...</div>}
-                { tabOverviewResponse && <div>Account info saved.</div>}
-                { error && <div>Incorrect account info, or POE servers are having trouble.</div>}
+                {loading && <div>Checking account info...</div>}
+                {tabOverviewResponse && <div>Account info saved.</div>}
+                {error && <div>Incorrect account info, or POE servers are having trouble.</div>}
 
             </div>
         </>
