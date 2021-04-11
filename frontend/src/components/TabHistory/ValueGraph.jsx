@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import dayjs from 'dayjs';
 import { useRecoilValue } from 'recoil';
 import { getTabHistory, getPingTotalValue } from 'helpers/tabHistory';
@@ -26,7 +26,6 @@ function makeData(hoursToPlot, response) {
             .map(entry => {
                 return {
                     date: entry.date,
-                    // value: getPingTotalValue(entry.items)  // was used when I used tabContent instead of storing stashValue in database
                     value: entry.totalChaosValue
                 }
             })
@@ -43,6 +42,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
     const tabContentAtom = useRecoilValue(tabContentState);
     const accountInfoAtom = useRecoilValue(accountInfoState);
     const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([])
     const [timeRange, setTimeRange] = useState(hoursToPlot)
 
     useEffect(() => {  // fetch stashvalue from db on load, or when accountInfo or tabContent changes

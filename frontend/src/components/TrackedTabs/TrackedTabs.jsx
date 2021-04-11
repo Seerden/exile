@@ -3,9 +3,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { accountInfoState } from 'state/stateAtoms'
 import { useRequest } from 'helpers/hooks/requestHooks'
 import { trackedTabsState, tabContentState } from 'state/stateAtoms'
-import StashTabContent from "components/StashTabContent/StashTabContent";
-import './style/TrackedTabs.scss'
 import { appendToTabContent } from "helpers/storage/tabContent";
+
+import StashTabContent from "components/StashTabContent/StashTabContent";
+import TrackedTabsDescription from './TrackedTabsDescription';
+import './style/TrackedTabs.scss'
 
 const TrackedTabs = (props) => {
     const accountInfoAtom = useRecoilValue(accountInfoState);
@@ -63,7 +65,7 @@ const TrackedTabs = (props) => {
         <div className="TrackedTabs">
             <header className="TrackedTabs__header">
                 <h3 className="TrackedTabs__header--title">
-                    Tracked tabs
+                    Stash Snapshot
                 </h3>
 
                 {loading &&
@@ -74,33 +76,36 @@ const TrackedTabs = (props) => {
                     </div>
                 }
 
-                {trackedTabsAtom.length > 0 &&
-                    <div>
-                        <span>
-                            <input
-                                type="button"
-                                className={`TrackedTabs__button ${autoFetch ? 'TrackedTabs__button--on' : ''}`}
-                                value={autoFetch ? 'Turn off auto fetch' : 'Turn on auto fetch'}
-                                onClick={toggleAutoFetch}
-                            />
-                        </span>
 
+            </header>
+            {trackedTabsAtom.length > 0 &&
+                <div>
+                    <span>
                         <input
                             type="button"
-                            className="TrackedTabs__button"
-                            value="Fetch manually"
-                            onClick={requestTrackedTabContents}
+                            className={`TrackedTabs__button ${autoFetch ? 'TrackedTabs__button--on' : ''}`}
+                            value={autoFetch ? 'Turn off auto fetch' : 'Turn on auto fetch'}
+                            onClick={toggleAutoFetch}
                         />
+                    </span>
 
-                    </div>
-                }
-            </header>
+                    <input
+                        type="button"
+                        className="TrackedTabs__button"
+                        value="Fetch manually"
+                        onClick={requestTrackedTabContents}
+                    />
 
-            { response &&
+                </div>
+            }
+
+            <TrackedTabsDescription />
+
+            {response &&
                 <StashTabContent />
             }
 
-            { error &&
+            {error &&
                 <div>
                     Error fetching from API
                 </div>

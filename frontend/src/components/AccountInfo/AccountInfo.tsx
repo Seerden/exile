@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AxiosResponse } from "axios";
 import { useRequest } from "helpers/hooks/requestHooks";
 import './style/AccountInfo.scss';
 
@@ -15,7 +16,7 @@ const defaultAccountInfo = {
     POESESSID: ""
 }
 
-function makeTabOverviewObjectForLocalStorage(tabOverviewResponse) {
+function makeTabOverviewObjectForLocalStorage(tabOverviewResponse: AxiosResponse): string {
     return JSON.stringify({
         date: new Date(),
         tabOverview: tabOverviewResponse
@@ -46,7 +47,7 @@ const AccountInfo = (props) => {
         e.preventDefault();
 
         buildAndMakeRequest({
-            method: 'POST',
+            method: "POST",
             data: accountInfo
         })
     }

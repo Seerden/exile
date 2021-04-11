@@ -7,31 +7,26 @@ import TabList from "components/TabList/TabList";
 import Home from "components/Home/Home"
 import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 import TabHistory from "components/TabHistory/TabHistory";
+import ValueGraph from 'components/TabHistory/ValueGraph';
 import Compare from "components/StashTabContent/Compare";
 
-import Main from "views/Main";
-import AccountView from 'views/Account';
 import TrackedView from 'views/Tracked';
 import Menu from "components/Menu/Menu";
 
-
 const App = (props) => {
-    
+
     return (
         <RecoilRoot>
             <div className="App">
-                
+
                 <Router>
                     <Routes>
                         <Route path="/" element={
                             <>
-                                <Menu />
-
-                                <AccountView />
-                                <TrackedView />
-                                {/* <Compare /> */}
+                                <TrackedTabs />
+                                {/* <ValueGraph width={500} height={250} margin={{x: 100, y: 50}} startFromZero={false} hoursToPlot={0} /> */}
                             </>
-                        } 
+                        }
                         />
                     </Routes>
                 </Router>

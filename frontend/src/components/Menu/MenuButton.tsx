@@ -8,7 +8,9 @@ const MenuButton = ({ text }: MenuButtonProps) => {
 
     return (
         <li className="MenuButton">
-            {text}
+            <button className="MenuButton__button">
+                {text}
+            </button>
         </li>
     )
 }
