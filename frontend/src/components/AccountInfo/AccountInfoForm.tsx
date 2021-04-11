@@ -1,8 +1,6 @@
-import React from "react";
-
 import { AccountInfoFormInterface } from './types';
 
-const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handleAccountInfoFormSubmit }: AccountInfoFormInterface) => {
+const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handleAccountInfoFormSubmit }: AccountInfoFormInterface): JSX.Element => {
 
     return (
         <form className="AccountInfo__form">
@@ -14,7 +12,13 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
 
             <div className="AccountInfo__form--field">
                 <label className="AccountInfo__form--label" htmlFor="accountName">Account Name:</label>
-                <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="accountName" value={accountInfo.accountName} />
+                <input 
+                    className="AccountInfo__form--input" 
+                    onChange={e => handleAccountInfoFormFieldChange(e)} 
+                    type="text" 
+                    name="accountName" 
+                    value={accountInfo.accountName} 
+                />
             </div>
 
             <div className="AccountInfo__form--field">
@@ -33,7 +37,13 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
 
             <div className="AccountInfo__form--field">
                 <label className="AccountInfo__form--label" htmlFor="POESESSID">POESESSID:</label>
-                <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="POESESSID" value={accountInfo.POESESSID} />
+                <input 
+                    className="AccountInfo__form--input" 
+                    onChange={e => handleAccountInfoFormFieldChange(e)} 
+                    type="text" 
+                    name="POESESSID" 
+                    value={accountInfo.POESESSID} 
+                />
             </div>
 
             <button
@@ -47,5 +57,4 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
     )
 }
 
-export default AccountInfoForm
-
+export default AccountInfoForm;
