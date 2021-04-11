@@ -8,5 +8,4 @@ export interface AccountInfoFormInterface {
     accountInfo: AccountInfoInterface,
     handleAccountInfoFormFieldChange: React.ChangeEventHandler,
     handleAccountInfoFormSubmit: React.MouseEventHandler
-
 }

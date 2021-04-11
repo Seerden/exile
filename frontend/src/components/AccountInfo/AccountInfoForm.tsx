@@ -27,8 +27,9 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
                     className="AccountInfo__form--input"
                     onChange={e => handleAccountInfoFormFieldChange(e)}
                     name="league"
+                    defaultValue="ritual"
                 >
-                    <option selected value="ritual">Ritual</option>
+                    <option value="ritual">Ritual</option>
                     <option value="hardcore-ritual">Hardcore Ritual</option>
                     <option value="standard">Standard</option>
                     <option value="hardcore-standard">Hardcore Standard</option>

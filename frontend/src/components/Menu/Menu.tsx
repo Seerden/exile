@@ -9,7 +9,7 @@ const menuItems: string[] = [
 ]
 
 const Menu = (props: any): JSX.Element => {
-    const menuItemsElement: Array<JSX.Element> = menuItems.map(entry => <MenuButton text={entry} />)
+    const menuItemsElement: Array<JSX.Element> = menuItems.map((entry, index) => <MenuButton key={`menu-button-${index}`} text={entry} />)
 
     
     return (
