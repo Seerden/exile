@@ -23,6 +23,7 @@ const App = (props) => {
                     <Routes>
                         <Route path="/" element={
                             <>
+                                <AccountInfo />
                                 <TrackedTabs />
                                 {/* <ValueGraph width={500} height={250} margin={{x: 100, y: 50}} startFromZero={false} hoursToPlot={0} /> */}
                             </>

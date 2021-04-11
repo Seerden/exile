@@ -57,9 +57,10 @@ const StashTabContent = (props) => {
             <div className="StashTabContent__filter">
                 <label 
                     htmlFor="StashTabContent__filter"
-                    className="StashTabContent__filter--label">
-                        Filter by name:
-                    </label>
+                    className="StashTabContent__filter--label"
+                >
+                    Filter by name:
+                </label>
                 <input
                     name="StashTabContent__filter"
                     className="StashTabContent__filter--input"

@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { AxiosResponse } from "axios";
 import { useRequest } from "helpers/hooks/requestHooks";
 import './style/AccountInfo.scss';
+import { AccountInfoInterface } from "./types";
+import AccountInfoForm from './AccountInfoForm';
 
 const leagueNameEnum = {  // @todo: now I'm using TypeScript, turn into an actual ENUM
     "hardcore-ritual": "Hardcore Ritual",
@@ -24,8 +26,10 @@ function makeTabOverviewObjectForLocalStorage(tabOverviewResponse: AxiosResponse
 }
 
 const AccountInfo = (props) => {
-    const [accountInfo, setAccountInfo] = useState(JSON.parse(localStorage.getItem("accountInfo")!) || defaultAccountInfo)
+    const [accountInfo, setAccountInfo] = useState<AccountInfoInterface>(JSON.parse(localStorage.getItem("accountInfo")!) || defaultAccountInfo)
     const [buildAndMakeRequest, tabOverviewResponse, error, loading] = useRequest({ url: 'poe/tabs/overview' })
+
+    const accountInfoProps = useMemo(() => ({ accountInfo, handleAccountInfoFormFieldChange, handleAccountInfoFormSubmit }), [accountInfo, handleAccountInfoFormFieldChange, handleAccountInfoFormSubmit])
 
     useEffect(() => {  // if stash tab overview was grabbed from API successfully, update local storage
         if (tabOverviewResponse) {
@@ -55,45 +59,8 @@ const AccountInfo = (props) => {
     return (
         <>
             <div className="AccountInfo">
-                <form className="AccountInfo__form">
-                    <header className="AccountInfo__header AccountInfo__form--field">
-                        <h3>
-                            Account Information
-                        </h3>
-                    </header>
+                <AccountInfoForm {...accountInfoProps} />
 
-                    <div className="AccountInfo__form--field">
-                        <label className="AccountInfo__form--label" htmlFor="accountName">Account Name:</label>
-                        <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="accountName" value={accountInfo.accountName} />
-                    </div>
-
-                    <div className="AccountInfo__form--field">
-                        <label className="AccountInfo__form--label" htmlFor="league">League:</label>
-                        <select
-                            className="AccountInfo__form--input"
-                            onChange={e => handleAccountInfoFormFieldChange(e)}
-                            name="league"
-                        >
-                            <option selected value="ritual">Ritual</option>
-                            <option value="hardcore-ritual">Hardcore Ritual</option>
-                            <option value="standard">Standard</option>
-                            <option value="hardcore-standard">Hardcore Standard</option>
-                        </select>
-                    </div>
-
-                    <div className="AccountInfo__form--field">
-                        <label className="AccountInfo__form--label" htmlFor="POESESSID">POESESSID:</label>
-                        <input className="AccountInfo__form--input" onChange={e => handleAccountInfoFormFieldChange(e)} type="text" name="POESESSID" value={accountInfo.POESESSID} />
-                    </div>
-
-                    <button
-                        onClick={e => handleAccountInfoFormSubmit(e)}
-                        type="submit"
-                        className="AccountInfo__form--submit"
-                    >
-                        Confirm and verify
-                    </button>
-                </form>
                 {loading && <div>Checking account info...</div>}
                 {tabOverviewResponse && <div>Account info saved.</div>}
                 {error && <div>Incorrect account info, or POE servers are having trouble.</div>}
