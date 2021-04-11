@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import './style/StashTabItem.scss'
 
 const StashTabItem = ({ item }) => {
     const totalChaosValue = item.chaosValue * (item.stackSize || 1);
-    console.log(item, totalChaosValue);
+    const [showTotalValue, setShowTotalValue] = useState(true);
+
+    const toggleValueDisplay = useCallback(() => {
+        setShowTotalValue(cur => !cur)
+    }, [showTotalValue])
 
     return (
         <li className="StashTabItem">
@@ -15,11 +19,18 @@ const StashTabItem = ({ item }) => {
                     src={item.icon} 
                 /> 
 
-                <span className="StashTabItem__icon--value">
-                    {+totalChaosValue.toFixed(1)}<em>c</em> 
+                <span 
+                    className="StashTabItem__icon--value"
+                    onMouseEnter={toggleValueDisplay}
+                    onMouseLeave={toggleValueDisplay}
+                >
+                    {showTotalValue ? +totalChaosValue.toFixed(1) : item.chaosValue.toFixed(2)}<em>c</em> 
                 </span>
 
-                <span className="StashTabItem__icon--count">
+                <span 
+                    className="StashTabItem__icon--count"
+                    title="item count"
+                >
                     {item.stackSize}
                 </span>
 

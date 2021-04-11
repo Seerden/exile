@@ -16,7 +16,8 @@ function parseTabPing(tabContentPing) {
     const parsedPing = tabContentPing.map(item => ({
         typeLine: item.typeLine, 
         stackSize: item.stackSize || 1,
-        totalChaosValue: item.totalChaosValue
+        chaosValue: item.chaosValue,
+        icon: item.icon
     }))
 
     return parsedPing

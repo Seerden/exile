@@ -1,0 +1,43 @@
+$default-shadow: 0 0 0.3rem #aaa;
+
+.MenuButton {
+    &:not(:nth-last-of-type(1)) {
+        margin-bottom: 0.4rem;
+    }
+
+    &__button {
+        display: block;
+        padding: 0.4rem;
+    
+        outline: none;
+
+        text-align: start;
+    
+        border-radius: 2px;
+        background-color: white;
+        box-shadow: $default-shadow;
+        border: 2px solid transparent;
+    
+        width: 8rem;
+    
+        font-size: 0.9rem;
+    
+        user-select: none;
+    
+        
+    
+        transition: all 75ms ease-in;
+    
+        &:hover {
+            padding-left: 0.7rem;
+            // border-color: #ccc;
+        }
+    
+        &:active, &:focus {
+            outline: none;
+            border-bottom-color: #eee;
+            box-shadow: $default-shadow, 0 0.4rem 0 -0.2rem #aaa;
+            background-color: #fafafa;
+        }
+    }
+}

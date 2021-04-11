@@ -130,3 +130,28 @@ export function makeStackedArray(stacked) {
         icon: stacked[item].icon
     }))
 }
+
+export async function grabTabs(tabIndices, { accountName, POESESSID, league }) {
+    let tabContents = [];
+    let err = false;
+
+    for (let tabIndex of tabIndices) {
+        const options = { accountName, POESESSID, league, tabIndex }
+
+        try {
+            let tab = await getTabAndExtractPropsFromItems(options)
+            if (tab && tab.length > 0) {
+                tabContents.push(tab)
+            }
+        } catch (error) {
+            err = true;
+            console.log(error);
+        }
+    }
+
+    tabContents = tabContents.flat();
+    let stackedObject = makeStackedContents(tabContents);
+    let stacked = makeStackedArray(stackedObject)
+
+    return [tabContents, stacked, err]
+}

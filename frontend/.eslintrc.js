@@ -4,7 +4,7 @@ module.exports = {
     },
     "overrides": [
         {
-            "files": ["**/*.js?(x)"],
+            "files": ["**/*.js?(x)", "**/*.ts?(x)"],
             "rules": {
                 "react-hooks/exhaustive-deps": "off",
                 "no-unused-vars": "off"

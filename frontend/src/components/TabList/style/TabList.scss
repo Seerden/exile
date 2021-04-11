@@ -1,18 +1,24 @@
 @use '../../../shared';
 
 .TabList {
-    // @extend %shared-section;
-    height: max-content;
+    position: absolute;
+    top: 20vh;
+    left: 25vw;
+    z-index: 20;
+    width: 50vw;
+
+    
+    padding: 2rem;
+
+    background-color: #fcfcfc;
+    box-shadow: 0 0 1rem #ccc;
+
+    // height: max-content;
 
     &__header {
         @extend %shared-heading;
         justify-content: space-between;
         display: flex;
-        // display: flex;
-        // justify-content: space-between;
-        // align-items: center;
-        // padding-bottom: 0.6rem;
-        // border-bottom: 1px solid #ccc;
         height: 2rem;
     }
 
@@ -22,12 +28,13 @@
         justify-content: space-between;
 
         padding: 0.2rem;
+    }
 
-        @media screen and (min-width: 768px) {
-            max-height: 8rem;
-            overflow-y: scroll;
-        }
-        
+    &__close {
+        @extend %shared-button;
+        align-items: center;
+        justify-content: center;
+        display: flex;
     }
 
     &__button {

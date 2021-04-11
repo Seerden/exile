@@ -3,11 +3,12 @@ import bodyParser from 'body-parser';
 import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 
-import { UserModel as User, StashModel as Stash, StashValueModel as StashValue } from '../db/db.js'
-import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray } from '../helpers/api/poeApi.js';
-import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
+import { UserModel as User, StashSnapshotModel as StashSnapshot, StashValueModel as StashValue } from '../db/db.js'
+import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray, grabTabs } from '../helpers/api/poeApi.js';
+import { stashValueEntryExists, addStashValueEntry, addStashSnapshotEntry } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
-import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
+import { getAndParseAllItemPagesToChaos, fetchAndParseNinjaPage } from '../helpers/api/ninjaApi';
+import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers';
 
 export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -21,57 +22,16 @@ function logRequest(req, res, next) {
 poeRouter.use(logRequest);
 
 poeRouter.get('/', (req, res) => {
-    
-})
 
+})
 
 poeRouter.post('/tabs', async (req, res) => {
     const { accountName, POESESSID, league, indices } = req.body;
-
-    let tabContents = [];
-    let err;
-
-    for (let tabIndex of indices) {
-        const options = { accountName, POESESSID, league, tabIndex }
-        try {
-            let tab = await getTabAndExtractPropsFromItems(options)
-            if (tab[0]?.typeLine) {
-                tabContents.push(tab)
-            } else {
-                err = true;
-                break;
-            }
-        } catch (error) {
-            err = true;
-            console.log(error);
-            res.status(520).send('Error fetching tab content from POE API.')
-        }
-    }
-
-    tabContents = tabContents.flat();
-
-    let stackedObject = makeStackedContents(tabContents);
-    let stacked = makeStackedArray(stackedObject)
+    const [tabContents, stacked, err] = await grabTabs(indices, { accountName, POESESSID, league });
 
     if (!err) {
-        StashValue.findOne({accountName, league: league.toLowerCase()}, (err, doc) => {
-            if (!doc) {
-                const newEntry = new StashValue({league: league.toLowerCase(), accountName, value: [{date: new Date, totalChaosValue: extractTotalChaosValue(tabContents)}]})
-                newEntry.save((err, saved) => {
-                    saved && console.log('StashValue entry saved');
-                });
-            } else {
-                if(doc.value.length > 0) {
-                    doc.value.push({date: new Date(), totalChaosValue: extractTotalChaosValue(tabContents)})
-                    doc.save();
-                } else {
-                    doc.value = [{date: new Date(), totalChaosValue: extractTotalChaosValue(tabContents)}]
-                    doc.save();
-                }
-            }
-
-            console.log('StashValue entry created or updated');
-        })
+        await addStashValueEntry(accountName, league, tabContents);
+        await addStashSnapshotEntry(accountName, league, stacked);
         res.send(stacked)
     } else {
         res.status(502).send('Error fetching from POE API')
@@ -88,15 +48,16 @@ poeRouter.post('/tabs/overview', (req, res) => {
 poeRouter.get('/ninja', async (req, res) => {
     const chaosValues = await getAndParseAllItemPagesToChaos("Ritual");
 
-    const chaosValueEntry = {
-        date: new Date(),
-        chaosValues
+    if (chaosValues) {
+        const chaosValueEntry = {
+            date: new Date(),
+            chaosValues
+        }
+    
+        storeNinjaValueSnapshot(chaosValueEntry);
+    
+        res.send(chaosValues)
+    } else {
+        res.status(502).send('Error fetching poe.ninja pages.')
     }
-
-    const loc = path.join(path.resolve(), '/helpers/api/ninjaChaosValues.json');
-    const ninjaChaosValues = JSON.parse(readFileSync(loc));
-    ninjaChaosValues.push(chaosValueEntry);
-    writeFileSync(loc, JSON.stringify(ninjaChaosValues))
-
-    res.send(chaosValues)
 })
