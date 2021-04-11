@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import { writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 
-import { UserModel as User, StashModel as Stash, StashValueModel as StashValue } from '../db/db.js'
+import { UserModel as User, StashSnapshotModel as StashSnapshot, StashValueModel as StashValue } from '../db/db.js'
 import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray } from '../helpers/api/poeApi.js';
 import { stashValueEntryExists } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';

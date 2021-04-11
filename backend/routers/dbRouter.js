@@ -6,7 +6,7 @@ import 'dotenv/config.js';
 import axios from 'axios';
 
 import {
-    StashModel as Stash,
+    StashSnapshotModel as Stash,
     StashValueModel as StashValue
 } from '../db/db.js'
 

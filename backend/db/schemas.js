@@ -11,19 +11,15 @@ export const userSchema = new mongoose.Schema({
     ]
 })
 
-export const stashSchema = new mongoose.Schema({
+export const stashSnapshotSchema = new mongoose.Schema({
     accountName: String,
     league: String,
-    items: {
+    date: Date,
+    items: [{
         typeLine: String,
-        data: [
-            {
-                date: Date,
-                stackSize: Number,
-                piecePrice: Number
-            }
-        ]
-    }
+        stackSize: Number,
+        chaosValue: Number
+    }]
 })
 
 const valueSchema = new mongoose.Schema({

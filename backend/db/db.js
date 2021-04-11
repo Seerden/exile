@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
   mongoose.set('useFindAndModify', false);
   mongoose.set('useCreateIndex', true);
 
-import { stashSchema, stashValueSchema, userSchema } from './schemas.js';
+import { stashSnapshotSchema, stashValueSchema, userSchema } from './schemas.js';
 
 const uri = 'mongodb://localhost:27017/exile'
 mongoose.connect(uri, { 
@@ -24,6 +24,6 @@ dbConnection.on('error', () => {
 })
 
 export const UserModel = dbConnection.model('User', userSchema)
-export const StashModel = dbConnection.model('Stash', stashSchema);
+export const StashSnapshotModel = dbConnection.model('Stash', stashSnapshotSchema);
 export const StashValueModel = dbConnection.model('StashValue', stashValueSchema)
 
