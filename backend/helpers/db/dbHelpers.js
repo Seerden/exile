@@ -1,6 +1,9 @@
 import { 
-    StashValueModel as StashValue 
+    StashValueModel as StashValue,
+    StashSnapshotModel as StashSnapshot 
 } from '../../db/db.js';
+
+import { extractTotalChaosValue } from '../api/poeApi'
 
 export async function stashValueEntryExists ({ league, accountName }) {
     const stashValueEntry = await StashValue.findOne({ league, accountName });
@@ -28,4 +31,20 @@ export async function addStashValueEntry(accountName, league, tabContents) {
 
         console.log('StashValue entry created or updated');
     })
+}
+
+export async function addStashSnapshotEntry(accountName, league, items) {
+    const newStashSnapshot = new StashSnapshot({
+        accountName,
+        league,
+        items,
+        date: new Date()
+    })
+
+    try {
+        await newStashSnapshot.save();
+        console.log('Stash snapshot successfully saved to database.');
+    } catch (error) {
+        console.error(error);
+    }
 }

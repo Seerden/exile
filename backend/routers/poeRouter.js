@@ -5,9 +5,9 @@ import path from 'path';
 
 import { UserModel as User, StashSnapshotModel as StashSnapshot, StashValueModel as StashValue } from '../db/db.js'
 import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray, grabTabs } from '../helpers/api/poeApi.js';
-import { stashValueEntryExists, addStashValueEntry } from '../helpers/db/dbHelpers.js';
+import { stashValueEntryExists, addStashValueEntry, addStashSnapshotEntry } from '../helpers/db/dbHelpers.js';
 import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
-import { getAndParseAllItemPagesToChaos, getItemPageAndParseToChaos } from '../helpers/api/ninjaApi';
+import { getAndParseAllItemPagesToChaos, fetchAndParseNinjaPage } from '../helpers/api/ninjaApi';
 import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers';
 
 export const poeRouter = express.Router({ mergeParams: true });
@@ -27,11 +27,11 @@ poeRouter.get('/', (req, res) => {
 
 poeRouter.post('/tabs', async (req, res) => {
     const { accountName, POESESSID, league, indices } = req.body;
-
     const [tabContents, stacked, err] = await grabTabs(indices, { accountName, POESESSID, league });
 
     if (!err) {
-        await addStashValueEntry(accountName, league, tabContents)
+        await addStashValueEntry(accountName, league, tabContents);
+        await addStashSnapshotEntry(accountName, league, stacked);
         res.send(stacked)
     } else {
         res.status(502).send('Error fetching from POE API')
