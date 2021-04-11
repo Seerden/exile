@@ -5,10 +5,6 @@ import mongoose from 'mongoose';
 import { stashSnapshotSchema, stashValueSchema, userSchema } from './schemas.js';
 
 const uri = 'mongodb://localhost:27017/exile'
-mongoose.connect(uri, { 
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
 
 export const dbConnection = mongoose.createConnection(uri, {
     useNewUrlParser: true,
