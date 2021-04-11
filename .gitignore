@@ -5,6 +5,7 @@ backend/node_modules
 backend/package-lock.json
 **/ninjaChaosValues.json
 
+*.eslintcache
 *.env
 *.rest
 node_modules
