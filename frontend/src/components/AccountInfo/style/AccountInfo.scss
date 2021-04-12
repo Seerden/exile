@@ -4,17 +4,14 @@
     display: flex;
     flex-wrap: wrap;
 
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    // @extend %shared-section;
     min-width: 20rem;
     align-self: start;
 
-    &__header {
-        text-align: center;
-    }
+    padding: 1rem;
+    border: 1px solid #ddd;
+    max-width: 70vw;
+    margin: 0 auto;
+    margin-top: 1rem;
 
     &__form {
         &--field {
@@ -28,7 +25,6 @@
             width: 7rem;
             font-size: 0.9rem;
             font-weight: 500;
-            text-align: right;
             margin-right: 0.5rem;
         }
 
