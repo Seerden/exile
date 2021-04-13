@@ -1,26 +1,4 @@
-import mongoose from 'mongoose';
-
-export const userSchema = new mongoose.Schema({
-    accountName: String,
-    POESESSID: String,
-    stash: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'StashSnapshot'
-        }
-    ]
-})
-
-export const stashSnapshotSchema = new mongoose.Schema({
-    accountName: String,
-    league: String,
-    date: Date,
-    items: [{
-        typeLine: String,
-        stackSize: Number,
-        chaosValue: Number
-    }]
-})
+import mongoose, { Schema, Document } from 'mongoose';
 
 const valueSchema = new mongoose.Schema({
     date: Date,

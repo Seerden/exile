@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-import { stashSnapshotSchema, stashValueSchema, userSchema } from './schemas.js';
+import { stashValueSchema } from './schemas.js';
+import { stashSnapshotSchema } from './schemas/stashSnapshotSchema.js';
 const uri = 'mongodb://localhost:27017/exile';
 export const dbConnection = mongoose.createConnection(uri, {
     useNewUrlParser: true,
@@ -13,7 +14,7 @@ dbConnection.on('connected', () => {
 dbConnection.on('error', () => {
     console.log('Error opening mongoose connection.');
 });
-export const UserModel = dbConnection.model('User', userSchema);
+// export const UserModel = dbConnection.model('User', userSchema)
 export const StashSnapshotModel = dbConnection.model('Stash', stashSnapshotSchema);
 export const StashValueModel = dbConnection.model('StashValue', stashValueSchema);
 //# sourceMappingURL=db.js.map

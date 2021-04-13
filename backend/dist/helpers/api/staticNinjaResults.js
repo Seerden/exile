@@ -33,7 +33,9 @@ async function locallyStoreNinjaPage(league, itemType, fields) {
         console.error(error);
     }
 }
-for (const entry of itemObj) {
-    await locallyStoreNinjaPage('Ritual', { kind: 'Item', type: entry.type }, ['name', 'icon']);
+async function locallyStoreAllNinjaItemPages() {
+    for (const entry of itemObj) {
+        await locallyStoreNinjaPage('Ritual', { kind: 'Item', type: entry.type }, ['name', 'icon']);
+    }
 }
 //# sourceMappingURL=staticNinjaResults.js.map

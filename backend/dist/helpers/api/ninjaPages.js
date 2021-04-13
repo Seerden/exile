@@ -35,5 +35,4 @@ export const itemObj = itemTypes.map(type => ({
     kind: "Item",
     type
 }));
-console.log('hello');
 //# sourceMappingURL=ninjaPages.js.map

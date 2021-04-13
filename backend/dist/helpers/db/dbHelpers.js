@@ -1,4 +1,5 @@
 import { StashValueModel as StashValue, StashSnapshotModel as StashSnapshot } from '../../db/db.js';
+import { User } from '../../db/schemas/userSchema.js';
 import { extractTotalChaosValue } from '../api/poeApi.js';
 export async function stashValueEntryExists({ league, accountName }) {
     const stashValueEntry = await StashValue.findOne({ league, accountName });
@@ -42,6 +43,13 @@ export async function addStashSnapshotEntry(accountName, league, items) {
     }
     catch (error) {
         console.error(error);
+    }
+}
+export async function findOrCreateUser(accountName, tabs) {
+    const doc = await User.findOne({ accountName, tabs });
+    if (!doc) {
+        const newUser = new User({ accountName, tabs });
+        return await newUser.save();
     }
 }
 //# sourceMappingURL=dbHelpers.js.map

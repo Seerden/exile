@@ -46,5 +46,3 @@ export const itemObj: ItemTypesType = itemTypes.map(type => ({
     kind: "Item",
     type
 }))
-
-console.log('hello')
