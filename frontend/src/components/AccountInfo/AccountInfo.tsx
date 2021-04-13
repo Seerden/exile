@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { AxiosResponse } from "axios";
 import { useRequest } from "helpers/hooks/requestHooks";
 import './style/AccountInfo.scss';
-import { AccountInfoInterface } from "./types";
+import { AccountInfoInterface } from "./AccountInfo.types";
 import AccountInfoForm from './AccountInfoForm';
 import SectionInfo from 'components/_shared/SectionInfo';
 
