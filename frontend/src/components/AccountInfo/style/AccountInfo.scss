@@ -2,18 +2,24 @@
 
 .AccountInfo {
     display: flex;
+
+    flex-direction: column;
     flex-wrap: wrap;
 
-    min-width: 20rem;
-    align-self: start;
-
+    // temp styles
     padding: 1rem;
     border: 1px solid #ddd;
     max-width: 70vw;
     margin: 0 auto;
     margin-top: 1rem;
 
+    &__description {
+        @extend %shared-section_info;
+    }
+
     &__form {
+        width: 20rem;
+
         &--field {
             display: block;
             margin-bottom: 0.3rem;

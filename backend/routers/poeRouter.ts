@@ -6,9 +6,9 @@ import path from 'path';
 import { UserModel as User, StashSnapshotModel as StashSnapshot, StashValueModel as StashValue } from '../db/db.js'
 import { getAndParseTabOverview, getTabAndExtractPropsFromItems, extractTotalChaosValue, makeStackedContents, makeStackedArray, grabTabs } from '../helpers/api/poeApi.js';
 import { stashValueEntryExists, addStashValueEntry, addStashSnapshotEntry } from '../helpers/db/dbHelpers.js';
-import { itemObj, currencyObj } from '../helpers/api/ninjaPages';
-import { getAndParseAllItemPagesToChaos, fetchAndParseNinjaPage } from '../helpers/api/ninjaApi';
-import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers';
+import { itemObj, currencyObj } from '../helpers/api/ninjaPages.js';
+import { getAndParseAllItemPagesToChaos, fetchAndParseNinjaPage } from '../helpers/api/ninjaApi.js';
+import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers.js';
 
 export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(bodyParser.urlencoded({ extended: true }));

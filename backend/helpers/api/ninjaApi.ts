@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { itemObj, currencyObj } from '../api/ninjaPages';
+import { itemObj, currencyObj } from './ninjaPages.js';
 
 export async function fetchNinjaPage(league, itemType) {
     const { kind, type } = itemType

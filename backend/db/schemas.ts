@@ -6,7 +6,7 @@ export const userSchema = new mongoose.Schema({
     stash: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Stash'
+            ref: 'StashSnapshot'
         }
     ]
 })

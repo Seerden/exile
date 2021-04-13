@@ -31,14 +31,7 @@
     }
 
     &__description {
-        margin: 1rem 0;
-        padding: 0.5rem;
-        padding-left: 1rem;
-        background-color: #fcfcfc;
-        font-size: 0.83rem;
-        border-radius: 3px;
-        border: 2px solid #ccc;
-        box-shadow: 0.4rem 0.4rem 0 -0.3rem #ccc;
+        @extend %shared-section_info;
     }
 
     &__button {
