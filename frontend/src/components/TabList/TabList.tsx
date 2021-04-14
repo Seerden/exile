@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import TabListItem from './TabListItem';
 import { TabOverview } from './TabList.types';
+import SectionInfo from 'components/_shared/SectionInfo';
 import './style/TabList.scss';
 import { useRecoilValue } from 'recoil';
 import { trackedTabsState } from 'state/stateAtoms'
@@ -10,69 +11,70 @@ const defaultTabOverview: TabOverview = {
     tabOverview: []
 }
 
+interface TabListElement {
+    name: String,
+    element: JSX.Element
+}
+
 const TabList = (props) => {
     const { tabOverview } = JSON.parse(localStorage.getItem("tabOverview")!) || defaultTabOverview;
     const trackedTabsAtom = useRecoilValue(trackedTabsState);
-
-    const [isOpen, setIsOpen] = useState(true);
-    function toggleOpen() {
-        setIsOpen(cur => !cur)
-    }
+    const [showRemoveOnly, setShowRemoveOnly] = useState<boolean>(false);
 
     const maxTrackedTabCount: number = 15;
 
-    function makeOverviewItemElements(): [JSX.Element] | [] {
+    const makeOverviewItemElements = useCallback((): (TabListElement[] | []) => {
         if (tabOverview?.length > 0) {
             return tabOverview.map((tab, i) => {
-                return <TabListItem key={`overviewItem-${Date.now()}-${i}`} tabProps={{ ...tab, index: i }} />
+                return {
+                    name: tab.n,
+                    element: <TabListItem key={`overviewItem-${Date.now()}-${i}`} tabProps={{ ...tab, index: i }} />
+                }
             })
         }
         return []
-}
+    }, [trackedTabsAtom, tabOverview])
 
-const overviewItemElements = makeOverviewItemElements();
-
-const handleTabSelectClick = useCallback(() => {
-    localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
-    alert('Tab selection updated')
-}, [trackedTabsAtom])
-
-return (
-    <div
-        className="TabList"
-        style={{ display: !isOpen && 'none'} as Object}   // @note: VERY WIP. Toggle rendering of the component from outside. hiding it is a quick workaround
-    >
-        <header className="TabList__header">
-            <h3>
-                Pick tabs to track (max. {maxTrackedTabCount})
-            </h3>
-
-            <button
-                onClick={toggleOpen}
-                className="TabList__close"
-            >
-                Close
-            </button>
-        </header>
-
-        <p className="TabList__info">
-            Make sure to re-submit your account info whenever you change your stash tab order in-game.
-        </p>
-
-        <div className="TabList__tabs">
-            {overviewItemElements?.length > 0 && overviewItemElements}
-        </div>
-
-        {trackedTabsAtom.length > 0 &&
-            <input
-                onClick={handleTabSelectClick}
-                className="TabList__button"
-                type="button"
-                value="Confirm"
-            />
+    const overviewItemElements: TabListElement[] | [] = useMemo(() => {
+        let elements = makeOverviewItemElements();
+        if (!showRemoveOnly) {
+            elements = elements.filter(entry => !entry.name.includes("(Remove-only)"))
         }
-    </div>
-)
+
+        return elements;
+    }, [showRemoveOnly]);
+
+    const handleTabSelectClick = useCallback(() => {
+        localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
+        alert('Tab selection updated')
+    }, [trackedTabsAtom])
+
+    return (
+        <div className="TabList">
+            <header className="TabList__header">
+                <h3>
+                    Pick tabs to track (max. {maxTrackedTabCount})
+                </h3>
+            </header>
+
+            <SectionInfo className="TabList__info">
+                Make sure to re-submit your account info whenever you change your stash tab order in-game.
+            </SectionInfo>
+
+            <div className="TabList__tabs">
+                {overviewItemElements?.length > 0 && overviewItemElements.map(entry => entry.element)}
+            </div>
+
+            {trackedTabsAtom.length > 0 &&
+                <input
+                    onClick={handleTabSelectClick}
+                    className="TabList__button"
+                    type="button"
+                    value="Confirm"
+                />
+            }
+        </div>
+    )
 }
 
 export default TabList

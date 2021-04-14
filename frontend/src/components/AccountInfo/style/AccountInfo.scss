@@ -2,21 +2,29 @@
 
 .AccountInfo {
     display: flex;
-    flex-wrap: wrap;
 
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    // @extend %shared-section;
-    min-width: 20rem;
-    align-self: start;
+    flex-wrap: wrap;
 
-    &__header {
-        text-align: center;
+    // temp styles
+    padding: 1rem;
+    border: 1px solid #ddd;
+    
+    @media screen and (min-width: 1280px) {
+        max-width: 50vw;
+    }
+    
+    max-width: 70vw;
+    margin: 0 auto;
+    margin-top: 1rem;
+
+    &__description {
+        @extend %shared-section_info;
     }
 
     &__form {
+        width: 20rem;
+
         &--field {
             display: block;
             margin-bottom: 0.3rem;
@@ -28,7 +36,6 @@
             width: 7rem;
             font-size: 0.9rem;
             font-weight: 500;
-            text-align: right;
             margin-right: 0.5rem;
         }
 

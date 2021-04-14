@@ -34,7 +34,15 @@ export const currencyObj = currencyTypes.map(type => ({
     type
 }))
 
-export const itemObj = itemTypes.map(type => ({
+
+export interface ItemTypeInterface {
+    kind: "Item",
+    type: string
+}
+
+export type ItemTypesType = Array<ItemTypeInterface>
+
+export const itemObj: ItemTypesType = itemTypes.map(type => ({
     kind: "Item",
     type
 }))

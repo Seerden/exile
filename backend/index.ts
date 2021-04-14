@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 
 const app = express();
 
-import { dbRouter} from './routers/dbRouter';
-import { poeRouter } from './routers/poeRouter';
+import { dbRouter} from './routers/dbRouter.js';
+import { poeRouter } from './routers/poeRouter.js';
 
 app.get('/', (req, res) => {
     res.send('/ GET successful')

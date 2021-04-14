@@ -6,7 +6,7 @@ import { trackedTabsState, tabContentState } from 'state/stateAtoms'
 import { appendToTabContent } from "helpers/storage/tabContent";
 
 import StashTabContent from "components/StashTabContent/StashTabContent";
-import TrackedTabsDescription from './TrackedTabsDescription';
+import SectionInfo from 'components/_shared/SectionInfo';
 import './style/TrackedTabs.scss'
 
 const TrackedTabs = (props) => {
@@ -34,7 +34,9 @@ const TrackedTabs = (props) => {
         // temporary DEV fix: 
         //      on liveserver reload, requestTrackedTabContents() will fire if a request had previously been made
         //      this effect ensures that initial request doesn't fire
-        makeRequest(false);
+        makeRequest(null);
+
+        return () => makeRequest(null)
     }, [])
 
     useEffect(() => {
@@ -99,7 +101,10 @@ const TrackedTabs = (props) => {
                 </div>
             }
 
-            <TrackedTabsDescription />
+            <SectionInfo className="TrackedTabs__description">
+                Here, you'll find the contents of the most recent snapshot of your Stash.
+                You can choose to either periodically automatically grab a new snapshot, or manually grab a snapshot whenever you wish (with a slight cooldown for rate limiting purposes).
+            </SectionInfo>
 
             {response &&
                 <StashTabContent />

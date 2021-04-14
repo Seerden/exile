@@ -1,22 +1,27 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "type": "module",
+  "description": "",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-back": "nodemon --experimental-specifier-resolution=node index.js"
+    "start-back": "tsc && concurrently \"tsc -w\" \"nodemon --delay 2.5 dist/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/body-parser": "^1.19.0",
+    "@types/express": "^4.17.11",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "dayjs": "^1.10.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.11.16"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2"
   }
 }

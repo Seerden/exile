@@ -1,4 +1,4 @@
-import { AccountInfoFormInterface } from './types';
+import { AccountInfoFormInterface } from './AccountInfo.types';
 
 const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handleAccountInfoFormSubmit }: AccountInfoFormInterface): JSX.Element => {
 
