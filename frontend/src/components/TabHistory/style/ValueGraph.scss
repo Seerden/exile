@@ -1,21 +1,24 @@
 @use '../../../shared';
 
 .ValueGraph {
-    // @extend %shared-section;
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    max-width: 70vw;
+    border: 1px solid #ddd;
+    
+    margin: 0 auto;
+    margin-top: 1rem;
+    padding: 1rem;
 
-    margin: auto;
+    @media screen  and (min-width: 1280px) {
+        max-width: 50vw;
+    }
 
+    
     svg {
         display: flex;
     }
 
     &__header {
         @extend %shared-heading;
-        text-align: center;
     }
 
 }
