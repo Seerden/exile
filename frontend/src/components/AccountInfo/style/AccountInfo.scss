@@ -6,10 +6,6 @@
     flex-direction: column;
     flex-wrap: wrap;
 
-    // temp styles
-    padding: 1rem;
-    border: 1px solid #ddd;
-    
     @extend %shared-section-temp;
 
     &__description {
@@ -43,6 +39,7 @@
             @extend %shared-button;
             display: block;
             margin: 0 auto;
+            margin-left: 7.5rem;
         }
     }
 }

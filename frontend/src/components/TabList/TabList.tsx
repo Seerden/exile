@@ -16,14 +16,16 @@ interface TabListElement {
     element: JSX.Element
 }
 
-const TabList = (props) => {
+interface TabListProps {
+    maxTabCount?: number;
+}
+
+const TabList = ({ maxTabCount = 15 }: TabListProps) => {
     const { tabOverview } = JSON.parse(localStorage.getItem("tabOverview")!) || defaultTabOverview;
     const trackedTabsAtom = useRecoilValue(trackedTabsState);
     const [showRemoveOnly, setShowRemoveOnly] = useState<boolean>(false);
 
-    const maxTrackedTabCount: number = 15;
-
-    const makeOverviewItemElements = useCallback((): (TabListElement[] | []) => {
+    const makeTabsElement = useCallback((): (TabListElement[] | []) => {
         if (tabOverview?.length > 0) {
             return tabOverview.map((tab, i) => {
                 return {
@@ -35,8 +37,8 @@ const TabList = (props) => {
         return []
     }, [trackedTabsAtom, tabOverview])
 
-    const overviewItemElements: TabListElement[] | [] = useMemo(() => {
-        let elements = makeOverviewItemElements();
+    const tabsElement: TabListElement[] | [] = useMemo(() => {
+        let elements = makeTabsElement();
         if (!showRemoveOnly) {
             elements = elements.filter(entry => !entry.name.includes("(Remove-only)"))
         }
@@ -53,7 +55,7 @@ const TabList = (props) => {
         <div className="TabList">
             <header className="TabList__header">
                 <h3>
-                    Pick tabs to track (max. {maxTrackedTabCount})
+                    Pick tabs to track (max. {maxTabCount})
                 </h3>
             </header>
 
@@ -61,17 +63,29 @@ const TabList = (props) => {
                 Make sure to re-submit your account info whenever you change your stash tab order in-game.
             </SectionInfo>
 
-            <div className="TabList__tabs">
-                {overviewItemElements?.length > 0 && overviewItemElements.map(entry => entry.element)}
-            </div>
+            {tabsElement?.length > 0 &&
+                <>
+                    <div className="">
+                        <button
+                            onClick={() => setShowRemoveOnly(cur => !cur)}
+                        >
+                            {showRemoveOnly ? 'Hide remove-only' : 'Show remove-only'}
+                        </button>
+                    </div>
 
-            {trackedTabsAtom.length > 0 &&
-                <input
-                    onClick={handleTabSelectClick}
-                    className="TabList__button"
-                    type="button"
-                    value="Confirm"
-                />
+                    <div className="TabList__tabs">
+                        {tabsElement.map(entry => entry.element)}
+                    </div>
+
+                    {trackedTabsAtom.length > 0 &&
+                        <input
+                            onClick={handleTabSelectClick}
+                            className="TabList__button"
+                            type="button"
+                            value="Confirm"
+                        />
+                    }
+                </>
             }
         </div>
     )
