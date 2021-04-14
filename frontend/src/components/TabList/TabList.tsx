@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import TabListItem from './TabListItem';
 import { TabOverview } from './TabList.types';
 import SectionInfo from 'components/_shared/SectionInfo';
@@ -11,22 +11,38 @@ const defaultTabOverview: TabOverview = {
     tabOverview: []
 }
 
+interface TabListElement {
+    name: String,
+    element: JSX.Element
+}
+
 const TabList = (props) => {
     const { tabOverview } = JSON.parse(localStorage.getItem("tabOverview")!) || defaultTabOverview;
     const trackedTabsAtom = useRecoilValue(trackedTabsState);
+    const [showRemoveOnly, setShowRemoveOnly] = useState<boolean>(false);
 
     const maxTrackedTabCount: number = 15;
 
-    function makeOverviewItemElements(): [JSX.Element] | [] {
+    function makeOverviewItemElements(): TabListElement[] | [] {
         if (tabOverview?.length > 0) {
             return tabOverview.map((tab, i) => {
-                return <TabListItem key={`overviewItem-${Date.now()}-${i}`} tabProps={{ ...tab, index: i }} />
+                return {
+                    name: tab.n,
+                    element: <TabListItem key={`overviewItem-${Date.now()}-${i}`} tabProps={{ ...tab, index: i }} />
+                }
             })
         }
         return []
 }
 
-const overviewItemElements = makeOverviewItemElements();
+const overviewItemElements: TabListElement[] | [] = useMemo(() => {
+    let elements = makeOverviewItemElements();
+    if (!showRemoveOnly) {
+        elements = elements.filter(entry => !entry.name.includes("(Remove-only)"))
+    }
+
+    return elements;
+}, [showRemoveOnly]);
 
 const handleTabSelectClick = useCallback(() => {
     localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
@@ -46,7 +62,7 @@ return (
         </SectionInfo>
 
         <div className="TabList__tabs">
-            {overviewItemElements?.length > 0 && overviewItemElements}
+            {overviewItemElements?.length > 0 && overviewItemElements.map(entry => entry.element)}
         </div>
 
         {trackedTabsAtom.length > 0 &&
