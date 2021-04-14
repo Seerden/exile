@@ -48,7 +48,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
     useEffect(() => {  // fetch stashvalue from db on load, or when accountInfo or tabContent changes
         if (accountInfoAtom) {
             makeRequest({
-                method: 'get',
+                method: 'GET',
                 params: {
                     accountName: accountInfoAtom.accountName
                 }
@@ -128,16 +128,16 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
             </header>
 
             <div>
-                <label 
+                <label
                     htmlFor="timeRange"
                 >
                     Time range:
                 </label>
-                
-                <input 
-                    name="timeRange" 
-                    type="number" 
-                    onChange={(e) => e.target.value > 0 && setTimeRange(e.target.value)} 
+
+                <input
+                    name="timeRange"
+                    type="number"
+                    onChange={(e) => e.target.value > 0 && setTimeRange(e.target.value)}
                     value={timeRange}
                 />
             </div>

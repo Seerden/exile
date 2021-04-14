@@ -25,7 +25,7 @@ const App = (props) => {
                                 <TabList />
                                 <TrackedTabs />
                                 {/* <Menu /> */}
-                                <ValueGraph width={500} height={250} margin={{x: 100, y: 50}} startFromZero={false} hoursToPlot={0} />
+                                <ValueGraph width={800} height={250} margin={{x: 100, y: 50}} startFromZero={false} hoursToPlot={0} />
                             </>
                         }
                         />

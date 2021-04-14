@@ -1,16 +1,7 @@
 @use '../../../shared';
 
 .ValueGraph {
-    max-width: 70vw;
-    border: 1px solid #ddd;
-    
-    margin: 0 auto;
-    margin-top: 1rem;
-    padding: 1rem;
-
-    @media screen  and (min-width: 1280px) {
-        max-width: 50vw;
-    }
+    @extend %shared-section-temp;
 
     
     svg {

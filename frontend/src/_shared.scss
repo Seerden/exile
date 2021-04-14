@@ -71,3 +71,25 @@
     border-radius: 0;    
     outline: none;
 }
+
+%shared-section-temp {
+    margin: 0 auto;
+    margin-top: 1rem;
+    max-width: 65vw;
+    padding: 2rem;
+
+    border: 1px solid #ddd;
+
+    @media screen and (min-width: 1080px) {
+        max-width: 70vw;
+    }
+    
+    @media screen and (min-width: 1280px) {
+        max-width: 50vw;
+    }
+
+
+    @media screen and (max-width: 1080px) {
+        max-width: 100vw;
+    }
+}
