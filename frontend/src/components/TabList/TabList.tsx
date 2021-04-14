@@ -23,7 +23,7 @@ const TabList = (props) => {
 
     const maxTrackedTabCount: number = 15;
 
-    function makeOverviewItemElements(): TabListElement[] | [] {
+    const makeOverviewItemElements = useCallback((): (TabListElement[] | []) => {
         if (tabOverview?.length > 0) {
             return tabOverview.map((tab, i) => {
                 return {
@@ -33,48 +33,48 @@ const TabList = (props) => {
             })
         }
         return []
-}
+    }, [trackedTabsAtom, tabOverview])
 
-const overviewItemElements: TabListElement[] | [] = useMemo(() => {
-    let elements = makeOverviewItemElements();
-    if (!showRemoveOnly) {
-        elements = elements.filter(entry => !entry.name.includes("(Remove-only)"))
-    }
-
-    return elements;
-}, [showRemoveOnly]);
-
-const handleTabSelectClick = useCallback(() => {
-    localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
-    alert('Tab selection updated')
-}, [trackedTabsAtom])
-
-return (
-    <div className="TabList">
-        <header className="TabList__header">
-            <h3>
-                Pick tabs to track (max. {maxTrackedTabCount})
-            </h3>
-        </header>
-
-        <SectionInfo className="TabList__info">
-            Make sure to re-submit your account info whenever you change your stash tab order in-game.
-        </SectionInfo>
-
-        <div className="TabList__tabs">
-            {overviewItemElements?.length > 0 && overviewItemElements.map(entry => entry.element)}
-        </div>
-
-        {trackedTabsAtom.length > 0 &&
-            <input
-                onClick={handleTabSelectClick}
-                className="TabList__button"
-                type="button"
-                value="Confirm"
-            />
+    const overviewItemElements: TabListElement[] | [] = useMemo(() => {
+        let elements = makeOverviewItemElements();
+        if (!showRemoveOnly) {
+            elements = elements.filter(entry => !entry.name.includes("(Remove-only)"))
         }
-    </div>
-)
+
+        return elements;
+    }, [showRemoveOnly]);
+
+    const handleTabSelectClick = useCallback(() => {
+        localStorage.setItem("trackedTabs", JSON.stringify(trackedTabsAtom))
+        alert('Tab selection updated')
+    }, [trackedTabsAtom])
+
+    return (
+        <div className="TabList">
+            <header className="TabList__header">
+                <h3>
+                    Pick tabs to track (max. {maxTrackedTabCount})
+                </h3>
+            </header>
+
+            <SectionInfo className="TabList__info">
+                Make sure to re-submit your account info whenever you change your stash tab order in-game.
+            </SectionInfo>
+
+            <div className="TabList__tabs">
+                {overviewItemElements?.length > 0 && overviewItemElements.map(entry => entry.element)}
+            </div>
+
+            {trackedTabsAtom.length > 0 &&
+                <input
+                    onClick={handleTabSelectClick}
+                    className="TabList__button"
+                    type="button"
+                    value="Confirm"
+                />
+            }
+        </div>
+    )
 }
 
 export default TabList

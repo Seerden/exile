@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-back": "tsc && concurrently \"tsc -w\" \"nodemon dist/index.js\""
+    "start-back": "tsc && concurrently \"tsc -w\" \"nodemon --delay 2.5 dist/index.js\""
   },
   "keywords": [],
   "author": "",
