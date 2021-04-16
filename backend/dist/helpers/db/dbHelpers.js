@@ -1,5 +1,6 @@
-import { StashValueModel as StashValue, StashSnapshotModel as StashSnapshot } from '../../db/db.js';
+import { StashValueModel as StashValue, } from '../../db/db.js';
 import { User } from '../../db/schemas/userSchema.js';
+import StashSnapshot from '../../db/schemas/stashSnapshotSchema.js';
 import { extractTotalChaosValue } from '../api/poeApi.js';
 export async function stashValueEntryExists({ league, accountName }) {
     const stashValueEntry = await StashValue.findOne({ league, accountName });

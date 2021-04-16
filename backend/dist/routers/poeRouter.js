@@ -3,6 +3,9 @@ import { getAndParseTabOverview, grabTabs } from '../helpers/api/poeApi.js';
 import { addStashValueEntry, addStashSnapshotEntry } from '../helpers/db/dbHelpers.js';
 import { getAndParseAllItemPagesToChaos } from '../helpers/api/ninjaApi.js';
 import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers.js';
+/**
+ * Router for all endpoints that interact directly with POE API and the poe.ninja API
+ */
 export const poeRouter = express.Router({ mergeParams: true });
 poeRouter.use(express.urlencoded({ extended: true }));
 poeRouter.use(express.json());
@@ -29,7 +32,8 @@ poeRouter.post('/tabs/overview', (req, res) => {
         .catch(err => console.log(err));
 });
 poeRouter.get('/ninja', async (req, res) => {
-    const chaosValues = await getAndParseAllItemPagesToChaos("Ritual");
+    const league = req.query.league;
+    const chaosValues = await getAndParseAllItemPagesToChaos(league);
     if (chaosValues) {
         const chaosValuesWithDate = {
             date: new Date(),

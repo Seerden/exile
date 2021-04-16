@@ -32,10 +32,10 @@ export async function getAndParseAllItemPagesToChaos(league) {
 }
 const customPrices = [
     { name: 'Chaos Orb', chaosValue: 1 },
-    { name: 'Foreboding Incubator', chaosValue: 4.5 },
-    { name: 'Fossilised Incubator', chaosValue: 0.5 },
-    { name: "Diviner's Incubator", chaosValue: 3.5 },
-    { name: "Geomancer's Incubator", chaosValue: 4 },
-    { name: "Skittering Incubator", chaosValue: 0.25 },
+    // { name: 'Foreboding Incubator', chaosValue: 4.5 },
+    // { name: 'Fossilised Incubator', chaosValue: 0.5 },
+    // { name: "Diviner's Incubator", chaosValue: 3.5 },
+    // { name: "Geomancer's Incubator", chaosValue: 4 },
+    // { name: "Skittering Incubator", chaosValue: 0.25 },
 ];
 //# sourceMappingURL=ninjaApi.js.map

@@ -2,9 +2,10 @@ import express from 'express';
 import 'dotenv/config.js';
 
 import {
-    StashSnapshotModel as Stash,
     StashValueModel as StashValue,
 } from '../db/db.js'
+
+import StashSnapshot from '../db/schemas/stashSnapshotSchema';
 
 import { User, UserInterface, UserTabsInterface } from '../db/schemas/userSchema.js';
 
@@ -39,11 +40,16 @@ dbRouter.get('/stashvalue', (req, res) => {
     })
 })
 
-
 dbRouter.post('/user', async (req, res) => {
     const { accountName, tabs } = req.body.user;
     findOrCreateUser(accountName, tabs)
-        .then(newUser => res.send(newUser))
+        .then(newUser => {
+            if (newUser) {
+                res.send(newUser)
+            } else {
+                res.send('User already exists in database')
+            }
+        })
         .catch(err => res.status(403).send(err))
 })
 

@@ -32,7 +32,14 @@ dbRouter.get('/stashvalue', (req, res) => {
 dbRouter.post('/user', async (req, res) => {
     const { accountName, tabs } = req.body.user;
     findOrCreateUser(accountName, tabs)
-        .then(newUser => res.send(newUser))
+        .then(newUser => {
+        if (newUser) {
+            res.send(newUser);
+        }
+        else {
+            res.send('User already exists in database');
+        }
+    })
         .catch(err => res.status(403).send(err));
 });
 async function findOrCreateUser(accountName, tabs) {
