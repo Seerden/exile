@@ -29,8 +29,8 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
                     name="league"
                     defaultValue="ritual"
                 >
-                    <option value="ritual">Ritual</option>
-                    <option value="hardcore-ritual">Hardcore Ritual</option>
+                    <option value="ultimatum">Ultimatum</option>
+                    <option value="hardcore-ultimatum">Hardcore Ultimatum</option>
                     <option value="standard">Standard</option>
                     <option value="hardcore-standard">Hardcore Standard</option>
                 </select>

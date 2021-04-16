@@ -6,16 +6,18 @@ import { AccountInfoInterface } from "./AccountInfo.types";
 import AccountInfoForm from './AccountInfoForm';
 import SectionInfo from 'components/_shared/SectionInfo';
 
+const currentLeague = 'Ultimatum';
+
 const leagueNameEnum = {  // @todo: now I'm using TypeScript, turn into an actual ENUM
-    "hardcore-ritual": "Hardcore Ritual",
+    "hardcore-ultimatum": "Hardcore Ultimatum",
     "hardcore-standard": "Hardcore Standard",
     "standard": "Standard",
-    "ritual": "Ritual"
+    "ultimatum": "Ultimatum"
 }
 
 const defaultAccountInfo = {
     accountName: "",
-    league: "Ritual",
+    league: "Ultimatum",
     POESESSID: ""
 }
 
