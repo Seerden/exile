@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { connection } from '../db.js';
 
 export const stashSnapshotSchema = new mongoose.Schema({
     accountName: String,
@@ -11,11 +12,9 @@ export const stashSnapshotSchema = new mongoose.Schema({
     }]
 })
 
-interface StashSnapshotInterface extends Document {
+export interface StashSnapshotInterface extends Document {
     accountName: string,
     league: string,
     date: Date,
     items: {typeLine: string, stackSize: number, chaosValue: number}[]
 };
-
-export default mongoose.model<StashSnapshotInterface>('StashSnapshot', stashSnapshotSchema)

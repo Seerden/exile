@@ -5,9 +5,13 @@ export async function fetchNinjaPage(league, itemType) {
     const { kind, type } = itemType
     const url = `https://poe.ninja/api/data/${kind}Overview?league=${league}&type=${type}`;
 
-    const res = await axios.get(url);
-    if (res) {
-        return res.data.lines
+    try {
+        const res = await axios.get(url);
+        if (res) {
+            return res.data.lines
+        }
+    } catch (e) {
+        console.log('Error fetching Ninja page');
     }
 }
 

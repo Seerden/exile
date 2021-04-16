@@ -1,15 +1,14 @@
 import mongoose, { Document } from 'mongoose';
+import { connection } from '../db.js';
 
-interface NinjaSnapshotInterface extends Document {
+export interface NinjaSnapshotInterface extends Document {
     date: Date,
     league: string,
-    lines: Object[]
+    values: {date: Date, chaosValues: any[]}[]
 }
 
 export const ninjaSnapshotSchema = new mongoose.Schema({
-    date: new Date,
+    date: Date,
     league: String,
-    lines: Array
+    values: Array
 })
-
-export default mongoose.model<NinjaSnapshotInterface>('NinjaSnapshot', ninjaSnapshotSchema);

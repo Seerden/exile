@@ -29,5 +29,3 @@ export interface UserInterface extends Document {
     accountName: string,
     tabs: UserTabsInterface,
 }
-
-export const User = mongoose.model<UserInterface>('User', userSchema);

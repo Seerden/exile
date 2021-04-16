@@ -92,7 +92,9 @@ export function getTabAndExtractPropsFromItems(options) {
         .then(items => {
             if (items.length > 0) {
                 items = items.map(({ typeLine, stackSize, icon }) => ({ typeLine, stackSize, icon }))
-                items = appendValueToItems(items)
+                if (options.league !== 'Ultimatum') {
+                    items = appendValueToItems(items)
+                }
                 return items
             }
         })

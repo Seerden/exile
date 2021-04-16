@@ -1,8 +1,6 @@
-import { 
-    StashValueModel as StashValue,
-} from '../../db/db.js';
-import { User, UserTabsInterface } from '../../db/schemas/userSchema.js';
-import StashSnapshot from '../../db/schemas/stashSnapshotSchema.js';
+
+import { UserTabsInterface } from '../../db/schemas/userSchema.js';
+import { StashSnapshot, StashValue, User } from '../../db/db.js';
 
 import { extractTotalChaosValue } from '../api/poeApi.js'
 

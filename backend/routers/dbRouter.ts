@@ -1,13 +1,8 @@
 import express from 'express';
 import 'dotenv/config.js';
 
-import {
-    StashValueModel as StashValue,
-} from '../db/db.js'
-
-import StashSnapshot from '../db/schemas/stashSnapshotSchema';
-
-import { User, UserInterface, UserTabsInterface } from '../db/schemas/userSchema.js';
+import { StashValue, StashSnapshot, User } from '../db/db.js';
+import { UserTabsInterface } from '../db/schemas/userSchema.js';
 
 /**
  * Express router for /db routes, used as API endpoints for frontend interaction with the database.

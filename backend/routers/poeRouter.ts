@@ -1,9 +1,13 @@
 import express, { Request, Response } from 'express';
 
+import '../db/db.js';
+
 import { getAndParseTabOverview, grabTabs } from '../helpers/api/poeApi.js';
 import { addStashValueEntry, addStashSnapshotEntry } from '../helpers/db/dbHelpers.js';
 import { getAndParseAllItemPagesToChaos } from '../helpers/api/ninjaApi.js';
 import { storeNinjaValueSnapshot } from '../helpers/storage/storageHelpers.js';
+
+import { NinjaSnapshot } from '../db/db.js';
 
 /**
  * Router for all endpoints that interact directly with POE API and the poe.ninja API
@@ -43,14 +47,30 @@ poeRouter.get('/ninja', async (req, res) => {
     const chaosValues = await getAndParseAllItemPagesToChaos(league);
 
     if (chaosValues) {
-        const chaosValuesWithDate = {
+        console.log('values found');
+        // const chaosValuesWithDate = {
+        //     date: new Date(),
+        //     chaosValues
+        // };
+        // storeNinjaValueSnapshot(chaosValuesWithDate);
+
+        const newNinjaSnapshot = new NinjaSnapshot({
             date: new Date(),
-            chaosValues
-        };
+            league,
+            values: chaosValues
+        });
 
-        storeNinjaValueSnapshot(chaosValuesWithDate);
+        // console.log(newNinjaSnapshot);
 
-        res.send(chaosValues)
+        newNinjaSnapshot.save((err) => {if (err) console.log(err);});
+
+        // if (savedNinjaSnapshot) {
+        //     res.send(chaosValues)
+        //     console.log(`Ninja snapshot saved for ${league} league`);
+        // } else {
+        //     res.status(502).send('Error saving poe.ninja snapshot')
+        // }
+
     } else {
         res.status(502).send('Error fetching poe.ninja pages.')
     }
