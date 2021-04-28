@@ -31,5 +31,7 @@
           "jest"
       ]
   },
+  "exclude": ["node_modules"],
+  "excludes": ["node_modules"],
   
 }

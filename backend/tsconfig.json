@@ -10,4 +10,5 @@
         "lib": ["ES2020"]
     },
     "exclude": ["node_modules"],
+    "excludes": ["node_modules"]
 }
