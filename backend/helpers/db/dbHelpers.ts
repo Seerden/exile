@@ -95,7 +95,7 @@ function leagueIndexInUserTabs (tabs: UserTabsInterface[], league: UserTabsInter
 }
 
 export async function stashSnapshotValues(accountName: any, league: any): Promise<object[]> | null {
-    const snapshots = await StashSnapshot.find({accountName, league});
+    const snapshots = await StashSnapshot.find({accountName, league}).lean();
 
     if (snapshots) {
         const data = snapshots.map(snapshot => ({
@@ -111,5 +111,4 @@ export async function stashSnapshotValues(accountName: any, league: any): Promis
 
         return data.filter(entry => entry.totalValue > 0);
     }
-
 }
