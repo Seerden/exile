@@ -3,6 +3,7 @@ import 'dotenv/config.js';
 
 import { StashValue, StashSnapshot, User } from '../db/db.js';
 import { UserTabsInterface } from '../db/schemas/userSchema.js';
+import { stashSnapshotValues } from '../helpers/db/dbHelpers.js';
 
 /**
  * Express router for /db routes, used as API endpoints for frontend interaction with the database.
@@ -24,15 +25,26 @@ dbRouter.get('/', (req, res) => {
 
 // Stash Content interaction
 //   note that POSTing stash state is handled in poeRouter, since that's where we grab the data from the POE API
-dbRouter.get('/stashvalue', (req, res) => {
+dbRouter.get('/stashvalue', async (req, res) => {
     // console.log(req.query);
-    StashValue.findOne({ accountName: req.query.accountName }, (err, doc) => {
-        if (err) {
-            res.status(401).send('Error fetching stash value from database.');
-        } else {
-            res.send(doc)
-        }
-    })
+    const { accountName, league } = req.query;
+
+    const stashValues = await stashSnapshotValues(accountName, league);
+
+    if (stashValues && stashValues.length > 0) {
+        // console.log(stashValues);
+        res.send(stashValues)
+    } else {
+        res.status(401).send('Error fetching stash values or empty response')
+    }
+
+    // StashValue.findOne({ accountName: req.query.accountName }, (err, doc) => {
+    //     if (err) {
+    //         res.status(401).send('Error fetching stash value from database.');
+    //     } else {
+    //         res.send(doc)
+    //     }
+    // })
 })
 
 dbRouter.post('/user', async (req, res) => {

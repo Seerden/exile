@@ -7,15 +7,7 @@ export const userSchema: Schema = new mongoose.Schema({
         tabIndices: Array,
         tabProps: Array,
         lastUpdated: Date
-
     }]
-    // POESESSID: String,
-    // stash: [
-    //     {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: 'StashSnapshot'
-    //     }
-    // ]
 })
 
 export interface UserTabsInterface {
@@ -27,5 +19,5 @@ export interface UserTabsInterface {
 
 export interface UserInterface extends Document {
     accountName: string,
-    tabs: UserTabsInterface,
+    tabs: UserTabsInterface[],
 }

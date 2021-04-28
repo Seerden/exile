@@ -15,7 +15,7 @@ export const connection = await mongoose.createConnection(uri, {
     useUnifiedTopology: true,
 });
 
-export const StashSnapshot = connection.model('StashSnapshot', stashSnapshotSchema)
+export const StashSnapshot = connection.model<StashSnapshotInterface>('StashSnapshot', stashSnapshotSchema)
 export const StashValue = connection.model('StashValue', stashValueSchema);
 export const NinjaSnapshot = connection.model<NinjaSnapshotInterface>('NinjaSnapshot', ninjaSnapshotSchema)
 export const User =  connection.model<UserInterface>('User', userSchema);

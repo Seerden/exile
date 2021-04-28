@@ -8,7 +8,7 @@ const itemTypes = [
     "Fossil", 
     "Resonator", 
     "Essence", 
-    "DivinationCard", 
+    // "DivinationCard", 
     "Prophecy", 
     // "SkillGem", 
     // "Base Type", 

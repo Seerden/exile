@@ -30,6 +30,7 @@ poeRouter.post('/tabs', async (req, res) => {
     if (!err) {
         await addStashValueEntry(accountName, league, tabContents);
         await addStashSnapshotEntry(accountName, league, stacked);
+        // console.log('stacked', stacked);
         res.send(stacked)
     } else {
         res.status(502).send('Error fetching from POE API')
@@ -37,8 +38,14 @@ poeRouter.post('/tabs', async (req, res) => {
 })
 
 poeRouter.post('/tabs/overview', (req, res) => {
+    const { accountName, league, POESESSID } = req.body;
+
     getAndParseTabOverview(req.body)
-        .then(tabs => res.send(tabs))
+        .then(tabs => {
+            if (tabs) {
+                res.send(tabs)
+            }
+        })
         .catch(err => console.log(err))
 })
 
@@ -47,12 +54,11 @@ poeRouter.get('/ninja', async (req, res) => {
     const chaosValues = await getAndParseAllItemPagesToChaos(league);
 
     if (chaosValues) {
-        console.log('values found');
-        // const chaosValuesWithDate = {
-        //     date: new Date(),
-        //     chaosValues
-        // };
-        // storeNinjaValueSnapshot(chaosValuesWithDate);
+        const chaosValuesWithDate = {
+            date: new Date(),
+            chaosValues
+        };
+        storeNinjaValueSnapshot(chaosValuesWithDate);
 
         const newNinjaSnapshot = new NinjaSnapshot({
             date: new Date(),
@@ -60,16 +66,13 @@ poeRouter.get('/ninja', async (req, res) => {
             values: chaosValues
         });
 
-        // console.log(newNinjaSnapshot);
-
-        newNinjaSnapshot.save((err) => {if (err) console.log(err);});
-
-        // if (savedNinjaSnapshot) {
-        //     res.send(chaosValues)
-        //     console.log(`Ninja snapshot saved for ${league} league`);
-        // } else {
-        //     res.status(502).send('Error saving poe.ninja snapshot')
-        // }
+        const savedNinjaSnapshot = await newNinjaSnapshot.save();
+        if (savedNinjaSnapshot) {
+            res.send(chaosValues)
+            console.log(`Ninja snapshot saved for ${league} league`);
+        } else {
+            res.status(502).send('Error saving poe.ninja snapshot')
+        }
 
     } else {
         res.status(502).send('Error fetching poe.ninja pages.')

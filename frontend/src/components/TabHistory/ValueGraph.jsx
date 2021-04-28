@@ -19,14 +19,12 @@ import { Tooltip, useTooltip, useTooltipInPortal, defaultStyles } from "@visx/to
 import { bisector } from 'd3-array';
 
 function makeData(hoursToPlot, response) {
-    const stashValue = response.value;
-
-    if (stashValue) {
-        const data = stashValue
+    if (response) {
+        const data = response
             .map(entry => {
                 return {
                     date: entry.date,
-                    value: entry.totalChaosValue
+                    value: entry.totalValue
                 }
             })
 
@@ -50,7 +48,8 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
             makeRequest({
                 method: 'GET',
                 params: {
-                    accountName: accountInfoAtom.accountName
+                    accountName: accountInfoAtom.accountName,
+                    league: accountInfoAtom.league
                 }
             }
             );

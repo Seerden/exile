@@ -6,7 +6,9 @@ const StashTabItem = ({ item }) => {
     const [showTotalValue, setShowTotalValue] = useState(true);
 
     const toggleValueDisplay = useCallback(() => {
-        setShowTotalValue(cur => !cur)
+        if (totalChaosValue > 0) {
+            setShowTotalValue(cur => !cur)
+        }
     }, [showTotalValue])
 
     return (

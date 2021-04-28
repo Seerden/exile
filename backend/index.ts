@@ -23,10 +23,10 @@ app.use('/poe', poeRouter);
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`server started on port ${port} on ${dayjs(new Date()).format('DD MMMM YYYY, HH:mm:ss')}`));
 
-StashSnapshot.findOne({}, (err, doc) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(doc);
-    }
-})
+// StashSnapshot.findOne({}, (err, doc) => {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log(doc);
+//     }
+// })

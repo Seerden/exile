@@ -27,7 +27,7 @@ const AccountInfoForm = ({ accountInfo, handleAccountInfoFormFieldChange, handle
                     className="AccountInfo__form--input"
                     onChange={e => handleAccountInfoFormFieldChange(e)}
                     name="league"
-                    defaultValue="ritual"
+                    defaultValue="ultimatum"
                 >
                     <option value="ultimatum">Ultimatum</option>
                     <option value="hardcore-ultimatum">Hardcore Ultimatum</option>

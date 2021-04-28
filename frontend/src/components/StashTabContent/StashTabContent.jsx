@@ -12,7 +12,7 @@ const StashTabContent = (props) => {
     const totalTabValue = extractTotalChaosValue(tabContent);
 
     const stashContentElement = useMemo(() => [...tabContent]
-        .filter(entry => entry.chaosValue > 0)
+        // .filter(entry => entry.chaosValue > 0)
         .sort((a, b) => {
             let aValue = a.chaosValue * (a.stackSize || 1);
             let bValue = b.chaosValue * (b.stackSize || 1);

@@ -31,7 +31,7 @@ export function parseTabOverview(tabOverviewData) {
     const { numTabs, tabs } = tabOverviewData;
 
     return tabs.map(tab => {
-        const { n, colour, type } = tab;
+        const { n, colour, type, ...rest } = tab;
         return { n, colour, type }
     })
 }
@@ -92,9 +92,7 @@ export function getTabAndExtractPropsFromItems(options) {
         .then(items => {
             if (items.length > 0) {
                 items = items.map(({ typeLine, stackSize, icon }) => ({ typeLine, stackSize, icon }))
-                if (options.league !== 'Ultimatum') {
-                    items = appendValueToItems(items)
-                }
+                items = appendValueToItems(items)
                 return items
             }
         })
