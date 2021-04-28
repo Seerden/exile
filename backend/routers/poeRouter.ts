@@ -30,7 +30,6 @@ poeRouter.post('/tabs', async (req, res) => {
     if (!err) {
         await addStashValueEntry(accountName, league, tabContents);
         await addStashSnapshotEntry(accountName, league, stacked);
-        // console.log('stacked', stacked);
         res.send(stacked)
     } else {
         res.status(502).send('Error fetching from POE API')

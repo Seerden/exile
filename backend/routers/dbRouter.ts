@@ -26,25 +26,15 @@ dbRouter.get('/', (req, res) => {
 // Stash Content interaction
 //   note that POSTing stash state is handled in poeRouter, since that's where we grab the data from the POE API
 dbRouter.get('/stashvalue', async (req, res) => {
-    // console.log(req.query);
     const { accountName, league } = req.query;
 
     const stashValues = await stashSnapshotValues(accountName, league);
 
     if (stashValues && stashValues.length > 0) {
-        // console.log(stashValues);
         res.send(stashValues)
     } else {
         res.status(401).send('Error fetching stash values or empty response')
     }
-
-    // StashValue.findOne({ accountName: req.query.accountName }, (err, doc) => {
-    //     if (err) {
-    //         res.status(401).send('Error fetching stash value from database.');
-    //     } else {
-    //         res.send(doc)
-    //     }
-    // })
 })
 
 dbRouter.post('/user', async (req, res) => {
