@@ -1,22 +1,24 @@
-import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import dayjs from 'dayjs';
 import { useRecoilValue } from 'recoil';
-import { getTabHistory, getPingTotalValue } from 'helpers/tabHistory';
 import { tabContentState, accountInfoState } from 'state/stateAtoms';
 import { useRequest } from 'helpers/hooks/requestHooks';
 
 import './style/ValueGraph.scss';
 
-import { AreaClosed, Line, Bar, LinePath } from '@visx/shape';
+import { LinePath } from '@visx/shape';
 import { curveMonotoneX } from '@visx/curve';
 import { scaleTime, scaleLinear } from '@visx/scale';
-import { LinearGradient } from '@visx/gradient';
-import { GridRows, GridColumns } from '@visx/grid';
 import { AxisBottom, AxisLeft } from '@visx/axis'
 import { Group } from "@visx/group";
 import { localPoint } from "@visx/event";
-import { Tooltip, useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
+import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
 import { bisector } from 'd3-array';
+
+interface DataPoint {
+    date: Date,
+    value: number
+}
 
 function makeData(hoursToPlot, response) {
     if (response) {
@@ -29,18 +31,17 @@ function makeData(hoursToPlot, response) {
             })
 
         let lastDate = new Date(data[data.length - 1].date);
-        let filteredData = hoursToPlot ? data.filter(entry => lastDate - new Date(entry.date) < 1000 * 60 * 60 * hoursToPlot) : data;
+        let filteredData = hoursToPlot ? data.filter(entry => lastDate.valueOf() - new Date(entry.date).valueOf() < 1000 * 60 * 60 * hoursToPlot) : data;
 
         return filteredData
     }
 }
 
 function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
-    const [makeRequest, response, error, loading] = useRequest({ url: '/db/stashvalue' });
+    const [makeRequest, response] = useRequest({ url: '/db/stashvalue' });
     const tabContentAtom = useRecoilValue(tabContentState);
     const accountInfoAtom = useRecoilValue(accountInfoState);
-    const [data, setData] = useState([]);
-    const [filteredData, setFilteredData] = useState([])
+    const [data, setData] = useState<DataPoint[]>([] as DataPoint[]);
     const [timeRange, setTimeRange] = useState(hoursToPlot)
 
     useEffect(() => {  // fetch stashvalue from db on load, or when accountInfo or tabContent changes
@@ -88,33 +89,27 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
     const handleMouseOver = useCallback((e) => {
         if (!data) { return }
         const coords = localPoint(e);
-        const x0 = timeScale.invert(coords.x - margin.x / 2);
-        const index = bisectDate(data, x0, 2);
-        const d0 = data[index - 1] ?? 0
-        const d1 = data[index] ?? 0
-        let d = d0;
-        if (d1.value && getX(d1.value)) {
-            d = x0.valueOf() - getX(d0.value).valueOf() > getX(d1.value).valueOf() - x0.valueOf() ? d1 : d0;
-        }
+        if (coords) {
+            const x0 = timeScale.invert(coords.x - margin.x / 2);
+            const index = bisectDate(data, x0, 2);
+            const d0 = data[index - 1] ?? 0
+            const d1 = data[index] ?? 0
+            let d = d0;
+            if (d1.value && getX(d1.value)) {
+                d = x0.valueOf() - getX(d0.value).valueOf() > getX(d1.value).valueOf() - x0.valueOf() ? d1 : d0;
+            }
+    
+            let tooltipDataY = d.value.toFixed(0);
+            let tooltipDataX = dayjs(getX(d)).format('DD/MM HH:mm');
+    
+            if (data.length > 1) {
+                showTooltip({
+                    tooltipLeft: timeScale(getX(d)),
+                    tooltipTop: yScale(d.value),
+                    tooltipData: tooltipDataY
+                })
+            }
 
-        let tooltipDataY = d.value ? +d.value.toFixed(0) : null
-        let tooltipDataX = d ? dayjs(getX(d)).format('DD/MM HH:mm') : null;
-
-        if (data.length > 1) {
-            showTooltip({
-                tooltipLeft: {
-                    y: timeScale(getX(d)),  // there are two tooltips: y indicates tooltip on data point itself, 
-                    x: timeScale(getX(d))  // x indicates the x-axis tooltip
-                },
-                tooltipTop: {
-                    y: yScale(d.value),
-                    x: height - margin.y
-                },
-                tooltipData: {
-                    y: tooltipDataY,
-                    x: tooltipDataX
-                }
-            })
         }
     }, [showTooltip, timeScale, yScale, data])
 
@@ -136,7 +131,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 <input
                     name="timeRange"
                     type="number"
-                    onChange={(e) => e.target.value > 0 && setTimeRange(e.target.value)}
+                    onChange={(e) => Number(e.target.value) > 0 && setTimeRange(e.target.value)}
                     value={timeRange}
                 />
             </div>
@@ -186,21 +181,21 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                             ))
                         }
 
-                        {tooltipOpen &&
+                        {tooltipOpen && tooltipTop && tooltipLeft &&
                             <g>
                                 <TooltipInPortal
                                     key={Math.random()}
-                                    top={margin.y / 2 + tooltipTop.y}
-                                    left={margin.x / 2 + tooltipLeft.y}
+                                    top={margin.y / 2 + tooltipTop}
+                                    left={margin.x / 2 + tooltipLeft}
                                     style={{
                                         ...defaultStyles,
                                         transform: 'translateX(-50%) translateY(-200%)',
                                         transition: 'all 100ms linear'
                                     }}
                                 >
-                                    {tooltipData.y}<em>c</em>
+                                    {tooltipData}<em>c</em>
                                 </TooltipInPortal>
-                                <TooltipInPortal
+                                {/* <TooltipInPortal
                                     key={Math.random()}
                                     top={margin.y / 2 + tooltipTop.x}
                                     left={margin.x / 2 + tooltipLeft.x}
@@ -212,7 +207,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                                     }}
                                 >
                                     {tooltipData.x}
-                                </TooltipInPortal>
+                                </TooltipInPortal> */}
                             </g>
                         }
                     </Group>
