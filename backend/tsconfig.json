@@ -9,6 +9,5 @@
         "outDir": "dist",
         "lib": ["ES2020"]
     },
-    "exclude": ["node_modules"],
-    "excludes": ["node_modules"]
+    "exclude": ["node_modules"]
 }

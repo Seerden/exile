@@ -14,5 +14,5 @@ app.get('/', (req, res) => {
 app.use('/db', dbRouter);
 app.use('/poe', poeRouter);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 app.listen(port, () => console.log(`server started on port ${port} on ${dayjs(new Date()).format('DD MMMM YYYY, HH:mm:ss')}`));

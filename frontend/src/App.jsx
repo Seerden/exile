@@ -6,7 +6,6 @@ import AccountInfo from "components/AccountInfo/AccountInfo";
 import TabList from "components/TabList/TabList";
 import TrackedTabs from "components/TrackedTabs/TrackedTabs";
 import ValueGraph from 'components/TabHistory/ValueGraph';
-import Compare from "components/StashTabContent/Compare";
 
 import TrackedView from 'views/Tracked';
 import Menu from "components/Menu/Menu";
