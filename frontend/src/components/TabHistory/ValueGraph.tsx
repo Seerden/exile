@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-import dayjs from 'dayjs';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { tabContentState, accountInfoState } from 'state/stateAtoms';
 import { useRequest } from 'helpers/hooks/requestHooks';
 
@@ -15,12 +14,10 @@ import { localPoint } from "@visx/event";
 import { useTooltip, useTooltipInPortal, defaultStyles } from "@visx/tooltip";
 import { bisector } from 'd3-array';
 
-interface DataPoint {
-    date: Date,
-    value: number
-}
+import ValueGraphBrush from './ValuGraphBrush';
+import { filteredDataState } from "./state";
 
-function makeData(hoursToPlot, response) {
+function makeData(hoursToPlot: number, response) {
     if (response) {
         const data = response
             .map(entry => {
@@ -31,7 +28,7 @@ function makeData(hoursToPlot, response) {
             })
 
         let lastDate = new Date(data[data.length - 1].date);
-        let filteredData = hoursToPlot ? data.filter(entry => lastDate.valueOf() - new Date(entry.date).valueOf() < 1000 * 60 * 60 * hoursToPlot) : data;
+        let filteredData = hoursToPlot > 0 ? data.filter(entry => lastDate.valueOf() - new Date(entry.date).valueOf() < 1000 * 60 * 60 * hoursToPlot) : data;
 
         return filteredData
     }
@@ -42,6 +39,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
     const tabContentAtom = useRecoilValue(tabContentState);
     const accountInfoAtom = useRecoilValue(accountInfoState);
     const [data, setData] = useState<DataPoint[]>([] as DataPoint[]);
+    const [filteredData, setFilteredData] = useRecoilState(filteredDataState);
     const [timeRange, setTimeRange] = useState(hoursToPlot)
 
     useEffect(() => {  // fetch stashvalue from db on load, or when accountInfo or tabContent changes
@@ -52,22 +50,30 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                     accountName: accountInfoAtom.accountName,
                     league: accountInfoAtom.league
                 }
-            }
-            );
+            });
         }
     }, [accountInfoAtom, tabContentAtom]);
 
     useEffect(() => {
         if (response) {
-            setData(makeData(timeRange, response))
+            const initialData = makeData(hoursToPlot, response);
+            setData(initialData);
+            setFilteredData(initialData);
+
         }
-    }, [response, timeRange])
+    }, [response])
 
-    const getAllX = data => data && data.map(entry => new Date(entry.date))
-    const getAllY = data => data && data.map(entry => +entry.value?.toFixed(1))
+    useEffect(() => {
+        if (response) {
+            setFilteredData(makeData(timeRange, response))
+        }
+    }, [timeRange])
 
-    const x = useMemo(() => getAllX(data) || [0], [data]);
-    const y = useMemo(() => getAllY(data) || [0], [data]);
+    const getAllX = filteredData => filteredData.map(entry => new Date(entry.date))
+    const getAllY = filteredData => filteredData.map(entry => +entry.value?.toFixed(1))
+
+    const x = useMemo(() => getAllX(filteredData) || [0], [filteredData]);
+    const y = useMemo(() => getAllY(filteredData) || [0], [filteredData]);
 
     const getX = d => new Date(d?.date).valueOf();
     const getY = d => +d?.value ?? 0;
@@ -87,20 +93,19 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
     const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip();
 
     const handleMouseOver = useCallback((e) => {
-        if (!data) { return }
+        if (!filteredData) { return }
         const coords = localPoint(e);
         if (coords) {
             const x0 = timeScale.invert(coords.x - margin.x / 2);
-            const index = bisectDate(data, x0, 2);
-            const d0 = data[index - 1] ?? 0
-            const d1 = data[index] ?? 0
+            const index = bisectDate(filteredData, x0, 2);
+            const d0 = filteredData[index - 1] ?? 0
+            const d1 = filteredData[index] ?? 0
             let d = d0;
             if (d1.value && getX(d1.value)) {
                 d = x0.valueOf() - getX(d0.value).valueOf() > getX(d1.value).valueOf() - x0.valueOf() ? d1 : d0;
             }
     
             let tooltipDataY = d.value.toFixed(0);
-            let tooltipDataX = dayjs(getX(d)).format('DD/MM HH:mm');
     
             if (data.length > 1) {
                 showTooltip({
@@ -111,7 +116,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
             }
 
         }
-    }, [showTooltip, timeScale, yScale, data])
+    }, [showTooltip, timeScale, yScale, filteredData])
 
     const { containerRef, TooltipInPortal } = useTooltipInPortal({ detectBounds: false, scroll: true })
 
@@ -136,7 +141,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 />
             </div>
 
-            {data?.length > 1 &&
+            {data.length > 1 &&
 
                 <svg
                     key={Math.random()}
@@ -149,7 +154,7 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                 >
                     <Group top={margin.y / 2} left={margin.x / 2}>
                         <LinePath
-                            data={data}
+                            data={filteredData}
                             curve={curveMonotoneX}
                             x={d => timeScale(getX(d))}
                             y={d => yScale(getY(d))}
@@ -168,8 +173,8 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                             numTicks={7}
                         />
 
-                        {data &&
-                            data.map((d, i) => (
+                        {filteredData &&
+                            filteredData.map((d, i) => (
                                 <circle
                                     key={`circle-${i}`}
                                     r={2}
@@ -195,24 +200,12 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
                                 >
                                     {tooltipData}<em>c</em>
                                 </TooltipInPortal>
-                                {/* <TooltipInPortal
-                                    key={Math.random()}
-                                    top={margin.y / 2 + tooltipTop.x}
-                                    left={margin.x / 2 + tooltipLeft.x}
-                                    style={{
-                                        ...defaultStyles,
-                                        transform: 'translateX(-50%)',
-                                        textAlign: 'center',
-                                        transition: 'all 100ms linear'
-                                    }}
-                                >
-                                    {tooltipData.x}
-                                </TooltipInPortal> */}
                             </g>
                         }
                     </Group>
                 </svg>
             }
+            <ValueGraphBrush {...{data, width, height, margin, startFromZero}} />
         </div>
     )
 }
