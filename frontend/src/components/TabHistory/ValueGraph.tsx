@@ -56,9 +56,10 @@ function ValueGraph({ width, height, margin, hoursToPlot, startFromZero }) {
 
     useEffect(() => {
         if (response) {
+            const __data = makeData(timeRange, response);
             const initialData = makeData(hoursToPlot, response);
             setData(initialData);
-            setFilteredData(initialData);
+            setFilteredData(__data);
 
         }
     }, [response])

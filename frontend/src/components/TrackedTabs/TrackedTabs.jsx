@@ -41,8 +41,6 @@ const TrackedTabs = (props) => {
 
     useEffect(() => {
         if (response) {
-            // console.log('tabContent response', response);
-            appendToTabContent(response);
             setTabContentAtom(response);
         }
     }, [response])

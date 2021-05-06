@@ -45,6 +45,7 @@ export async function getAndParseAllItemPagesToChaos(league) {
 
 const customPrices = [  // custom pricelist. @todo: allow user definition. place in proper location
     { name: 'Chaos Orb', chaosValue: 1 },
+    { name: "Rogue's Marker", chaosValue: 1/400 }
     // { name: 'Foreboding Incubator', chaosValue: 4.5 },
     // { name: 'Fossilised Incubator', chaosValue: 0.5 },
     // { name: "Diviner's Incubator", chaosValue: 3.5 },
