@@ -13,7 +13,7 @@ export const userSchema: Schema = new mongoose.Schema({
 export interface UserTabsInterface {
     league: string,
     tabIndices: number[],
-    tabProps: string[],
+    tabProps: any[],
     lastUpdated: Date
 }
 
