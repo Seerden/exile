@@ -37,3 +37,14 @@ export function makePoeTradeExchangeUrl({ have, want, minimum}: ExchangeProps) {
 export function getPoeItemId(typeLine: string) {
     return poeStaticItems.filter(entry => entry.text === typeLine)[0]?.id
 }
+
+export function suggestMinimumCount(typeLine: string) {
+    if (typeLine.toLowerCase().includes("Essence")) {
+        return 20;
+    } 
+    else if (typeLine.toLowerCase().includes("Emblem")) {
+        return 1;
+    } else {
+        return 10;
+    }
+}

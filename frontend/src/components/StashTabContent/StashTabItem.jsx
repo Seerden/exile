@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import './style/StashTabItem.scss'
-import { getPoeItemId, makePoeTradeExchangeUrl } from 'helpers/poeApi'
+import { getPoeItemId, makePoeTradeExchangeUrl, suggestMinimumCount } from 'helpers/poeApi'
+
+
 
 const StashTabItem = ({ item }) => {
     const totalChaosValue = item.chaosValue * (item.stackSize || 1);
@@ -15,8 +17,10 @@ const StashTabItem = ({ item }) => {
     const query: { have: string[], want: string[], minimum: number } = {
         want: [getPoeItemId(item.typeLine)],
         have: ['chaos'],
-        minimum: 5
+        minimum: suggestMinimumCount(item.typeLine)
     }
+
+    
 
     return (
         <li className="StashTabItem">
