@@ -7,7 +7,6 @@ import {StashSnapshotInterface, stashSnapshotSchema} from './schemas/stashSnapsh
 import {ninjaSnapshotSchema, NinjaSnapshotInterface} from './schemas/ninjaSnapshotSchema.js';
 import { userSchema, UserInterface } from './schemas/userSchema.js';
 
-
 const uri = 'mongodb://localhost:27017/exile'
 
 export const connection = await mongoose.createConnection(uri, {
@@ -22,6 +21,5 @@ export const User =  connection.model<UserInterface>('User', userSchema);
 
 console.log('models:', connection.modelNames());
 
-// connection.on('connected', () => { console.log('Mongoose connected!') })
-// connection.on('error', () => { console.log('Mongoose connected!') })
-
+const snapshots = await StashSnapshot.findOne({accountName: "seerden"})
+console.log(snapshots);
