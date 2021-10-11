@@ -1,5 +1,5 @@
 {
-  "name": "time",
+  "name": "exile",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/seerden/time.git"
+    "url": "git+https://github.com/seerden/exile.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/seerden/time/issues"
+    "url": "https://github.com/seerden/exile/issues"
   },
-  "homepage": "https://github.com/seerden/time#readme",
+  "homepage": "https://github.com/seerden/exile#readme",
   "description": "",
   "dependencies": {
     "@types/jest": "^26.0.22",
